@@ -1,5 +1,7 @@
 <script setup>
-import Web_test from '../components/Log_in/Web_test.vue';
+import Web_test from '@/components/Log_in/Web_test.vue';
+
+
 
 
 
