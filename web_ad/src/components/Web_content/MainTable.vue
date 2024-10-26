@@ -10,7 +10,7 @@ const item = {
 const tableData = ref(Array.from({ length: 100 }).fill(item))
 </script>
 <template>
-  <el-container class="layout-container-demo" style="height: 500px; width:700px; ">
+  <el-container class="layout-container-demo" >
 
 
     <el-container>
