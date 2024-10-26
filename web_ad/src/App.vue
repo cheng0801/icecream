@@ -30,23 +30,27 @@ import Web_Header from './page/Web_Header.vue';
 .header-z-index {
   z-index: 333;
   /* background-color: #3498db; */
-  width: 99vw;
-  height: 75px;
+  width: 70%;
+  height: 175px;
   position: fixed;
+  align-self: center;
 }
 
 .content-z-index {
   z-index: 1;
   /* background-color: #ccb4ce; */
-  margin: 100px 0 0 0;
+  margin: 176px 0 0 0;
+  width: 70%;
+  align-self: center;
   padding: 1;
   flex: 1;
 }
 
 .footer {
   background-color: #95a5a6;
-text-align: center;
+  text-align: center;
   height: 5vh;
-
+  width: 70%;
+  align-self: center;
 }
 </style>
