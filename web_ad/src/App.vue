@@ -1,47 +1,52 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import Web_Content from './page/Web_Content.vue';
+import Web_footer from './page/Web_footer.vue';
+import Web_Header from './page/Web_Header.vue';
+
+
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+   
+  <div class="flex-container"> 
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <Web_Header class="header-z-index" />
+    <Web_Content class="content-z-index" />
+    <Web_footer />
+   
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  margin: 0;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.header-z-index {
+  z-index: 333;
+  /* background-color: #3498db; */
+  width: 99vw;
+  height: 75px;
+  position: fixed;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.content-z-index {
+  z-index: 1;
+  /* background-color: #ccb4ce; */
+  margin: 100px 0 0 0;
+  padding: 1;
+  flex: 1;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+.footer {
+  background-color: #95a5a6;
+text-align: center;
+  height: 5vh;
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
 }
 </style>
