@@ -1,20 +1,23 @@
 <script setup>
 import Web_Content from './page/Web_Content.vue';
+
 import Web_footer from './page/Web_footer.vue';
 import Web_Header from './page/Web_Header.vue';
+import Web_side_Images from './page/Web_side_Images.vue';
+
 
 
 
 </script>
 
 <template>
-   
-  <div class="flex-container"> 
 
+  <div class="flex-container">
+    <Web_side_Images />
     <Web_Header class="header-z-index" />
     <Web_Content class="content-z-index" />
     <Web_footer />
-   
+
   </div>
 </template>
 
@@ -42,7 +45,7 @@ import Web_Header from './page/Web_Header.vue';
   margin: 176px 0 0 0;
   width: 70%;
   align-self: center;
-  padding: 1;
+
   flex: 1;
 }
 

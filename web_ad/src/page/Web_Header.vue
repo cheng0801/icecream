@@ -42,7 +42,7 @@ import Web_test from '@/components/Log_in/Web_test.vue';
 }
 
 .Web-nav {
-  margin: 10px 10px 10px 100px;
+  margin: 10%;
 }
 
 .el-avatar {
@@ -52,7 +52,7 @@ import Web_test from '@/components/Log_in/Web_test.vue';
 }
 
 .log-in {
-  margin-left: 900px;
+  margin-left: 50%;
 }
 
 
