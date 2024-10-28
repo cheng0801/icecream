@@ -34,7 +34,7 @@ import Web_side_Images from './page/Web_side_Images.vue';
   z-index: 333;
   /* background-color: #3498db; */
   width: 70%;
-  height: 175px;
+  height: 180px;
   position: fixed;
   align-self: center;
 }

@@ -1,5 +1,8 @@
 <script setup>
-import My_log from './my_log.vue';
+
+import my_log_in from './my_log_in.vue';
+
+
 
 
 const props = defineProps({
@@ -11,21 +14,17 @@ const props = defineProps({
   <Transition name="modal">
     <div v-if="show" class="modal-mask">
       <div class="modal-container">
-        
-    
-      
-      <slot name="body"><My_log/></slot>
-      
-      <button
-              class="modal-default-button"
-              @click="$emit('close')"
-            >OK</button>
-    </div>
+        <button class="modal-default-button" @click="$emit('close')"><el-icon><SwitchButton /></el-icon></button>
+        <slot name="body">
+          <my_log_in />
+        </slot>
+      </div>
+
     </div>
   </Transition>
 </template>
 
-<style>
+<style scoped>
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -33,32 +32,26 @@ const props = defineProps({
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(17, 228, 200, 0.5);
   display: flex;
   transition: opacity 0.3s ease;
 }
 
 .modal-container {
-  width: 500px;
+  width: 60%;
   margin: auto;
   padding: 20px 30px;
-  background-color: #fff;
+  background-color: #3dcfd4;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
 }
 
-.modal-header h3 {
-  margin-top: 0;
-  color: #42b983;
-}
 
-.modal-body {
-  margin: 20px 0;
-}
 
 .modal-default-button {
   float: right;
+  top: 0;
 }
 
 /*

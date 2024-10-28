@@ -20,14 +20,15 @@ const img4 = ref(true)
     </div> -->
 
     <div class="right-container">
+        <!--  <div v-show="img1" class="img-above">
+         盒子一起消失，没有占位下面图片会向上-->
 
-        <div v-show="img1" class="img-above">
-
+        <div class="img-above">
             <span class="image-remove-view1" v-show="img1" @click="img1 = !img1">+</span>
             <a href=""> <img v-show="img1" src="../assets/img/side/view1.jpg" class="cover-img"></a>
         </div>
-        <div v-show="img2" class="img-below">
 
+        <div class="img-below">
             <span class="image-remove-view2" v-show="img2" @click="img2 = !img2">+</span>
             <a href=""> <img v-show="img2" src="../assets/img/side/view2.jpg" class="cover-img"></a>
         </div>
@@ -35,14 +36,13 @@ const img4 = ref(true)
 
     <div class="left-container">
 
-        <div v-show="img3" class="img-above">
+        <div class="img-above">
             <span class="image-remove-home1" v-show="img3" @click="img3 = !img3">+</span>
             <a href=""> <img v-show="img3" src="../assets/img/side/home1.jpg" class="cover-img"></a>
         </div>
 
-        <div v-show="img4" class="img-below">
-
-            <span class="image-remove-home2" v-show="img4" @click="img2 = !img4">+</span>
+        <div  class="img-below">
+            <span class="image-remove-home2" v-show="img4" @click="img4 = !img4">+</span>
             <a href=""> <img v-show="img4" src="../assets/img/side/home2.jpg" class="cover-img"></a>
         </div>
 
@@ -62,13 +62,12 @@ const img4 = ref(true)
     /* background-color: aqua; */
     width: 100%;
     height: 50%;
-
+top: 50%;
 }
 
 img {
     width: 100%;
     height: 100%;
-
 
 }
 
@@ -133,7 +132,7 @@ img {
     top: 51%;
     left: 90%;
     display: block;
-    position: absolute;
+    position: absolute
 }
 
 .right-container {

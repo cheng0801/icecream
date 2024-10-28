@@ -9,7 +9,7 @@ import Web_content_Img from './Web_content_Img.vue';
 
 <template>
     <div class="content">
-       
+        
         <Web_content_Img class="Main-img" />
         <Web_home/>
        
