@@ -1,6 +1,4 @@
-* {
-	box-sizing: border-box;
-  }
+
    
   body {	
 	margin: 0;
@@ -11,8 +9,9 @@
 
   @media screen and (min-width: 300px) {
 	html {
-	  width: calc(100vw - 2px); /* 减去2px是为了避免滚动条的影响 */
-	  height: calc((100vw - 2px) * 1000px / 1000px);
+	  /* width: calc(100vw - 2px); 减去2px是为了避免滚动条的影响 */
+	  /* height: calc((100vw - 2px) * 1000px / 1000px); */
+	  background-color: white;
 	}
   }
    

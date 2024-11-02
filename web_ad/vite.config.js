@@ -7,7 +7,7 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 import Icons from 'unplugin-icons/vite'
-import IconsResolver from 'unplugin-icons/resolver'
+// import IconsResolver from 'unplugin-icons/resolver'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -15,13 +15,11 @@ export default defineConfig({
     vue(),
     AutoImport({
       imports: ["vue"],
-      resolvers: [ElementPlusResolver(),IconsResolver()],
+      resolvers: [ElementPlusResolver()],
     }),
     Components({
-      resolvers: [ElementPlusResolver(),IconsResolver({
-        enabledCollections: ["ep"],
-      }),
-    ],
+      resolvers: [ElementPlusResolver()],
+  
     }),
 
 

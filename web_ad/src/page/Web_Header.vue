@@ -1,5 +1,10 @@
 <script setup>
-import Web_test from '../components/Log_in/Web_test.vue';
+import Web_login from '@/components/Log_in/log/Web_login.vue';
+import Web_signin from '@/components/Log_in/sign/Web_signin.vue';
+
+
+
+
 
 
 
@@ -12,9 +17,10 @@ import Web_test from '../components/Log_in/Web_test.vue';
     <nav class="Web-nav">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">
-          <a href="/"><el-icon>
-              首页
-            </el-icon></a>
+          <a href="/"><el-icon size="20"><House/></el-icon></a>
+        </el-breadcrumb-item>
+        <el-breadcrumb-item>
+          <a href="/">首页</a>
         </el-breadcrumb-item>
         <el-breadcrumb-item>
           <a href="/">服务</a>
@@ -26,32 +32,43 @@ import Web_test from '../components/Log_in/Web_test.vue';
       </el-breadcrumb>
     </nav>
     <div class="log-in">
-      <el-avatar class="el-avatar"> <Web_test /> </el-avatar>
+      <el-avatar class="el-avatar"> <Web_signin /> </el-avatar>
+      <el-avatar class="el-avatar"> <Web_login /> </el-avatar>
     </div>
   </div>
-
+  
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .header {
-  display: flex;
-  align-items: center;
+  
+  position: absolute;
+  
+  
   background-color: #cc9d9d;
 }
 
 .Web-nav {
-  margin: 10px 10px 10px 100px;
+  position: absolute;
+  margin: 80px;
+
+  
+
 }
 
 .el-avatar {
 
-  color: #000;
+background-color  : #d6dee6;
+
 
 }
-
 .log-in {
-  margin-left: 900px;
+  position: absolute;
+top: 80px;
+margin-left: 70%;
+
 }
+
 
 
 </style>

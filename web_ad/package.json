@@ -11,7 +11,10 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
+    "@vuelidate/core": "^2.0.3",
+    "@vuelidate/validators": "^2.0.4",
     "axios": "^1.7.7",
+    "element": "^0.1.4",
     "element-plus": "^2.8.6",
     "sass": "^1.80.4",
     "vue": "^3.5.12",
