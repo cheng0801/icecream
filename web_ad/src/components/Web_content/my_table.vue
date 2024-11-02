@@ -1,61 +1,124 @@
-<script>
-
-export default {
-  data() {
-    return {
-      searchContent: '',
-      currentPage: 1,
-      pageSize: 10,
-      total: 111, // 总条目数，需要从后端获取或手动设置
-      pvData: [/* 初始化数据 */], // 假设这是从后端获取的数据数组
-    };
-  },
-  computed: {
-    filteredData() {
-      return this.pvData.filter(item => item.name.includes(this.searchContent))
-    }
-  },
-  methods: {
-    handleFilter() {
-      this.currentPage = 1; // 重置到第一页
-    },
-    handleCreate() {
-      // 新增用户的逻辑，这里可以调用后端API或直接在pvData中添加新项
-    },
-    handleSizeChange(val) {
-      this.pageSize = val; // 分页大小改变时的处理逻辑，可以调用后端API获取数据或重新计算pvData的slice范围
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val; // 当前页改变时的处理逻辑，可以调用后端API获取数据或重新计算pvData的slice范围
-    }
-  }
-};
-</script>
-
-
-
 <template>
+  <el-config-provider :locale="zhCn">
+    <el-pagination
+      v-model:current-page="currentPage4"
+      v-model:page-size="pageSize4"
+      :page-sizes="[100, 200, 300, 400]"
+      :size="size"
+      :disabled="disabled"
+      :background="background"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="400"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
+  </el-config-provider>
 
-  <div class="tab-container">
-    <div class="filter-container" style="margin-bottom: 20px">
-      <el-input maxlength="40" placeholder="用户名" style="width: 200px" v-model="searchContent"
-        @keyup.enter="handleFilter" />
-      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="searchContList">搜索</el-button>
-      <el-button class="filter-item" style="margin-left: 10px" type="primary" icon="el-icon-edit"
-        @click="handleCreate">新增用户</el-button>
-    </div>
-    <el-table :data="filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize)" border fit
-      highlight-current-row style="width: 100%">
-      <el-table-column prop="id" label="ID" width="180"></el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="age" label="年龄"></el-table-column>
-      <el-table-column prop="address" label="地址"></el-table-column>
-      <el-pagination @size-change="handleSizeChange" :current-page="currentPage" :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
-    </el-table>
-  </div>
+  <el-table :data="filterTableData" class="table-header" total="total">
+    <el-table-column label="Name" prop="name" />
+    <el-table-column label="Date" prop="date" />
+    
+    <el-table-column align="right">
+      <template #header>
+        <el-input v-model="search" size="small" placeholder="Type to search" />
+      </template>
+      <template #default="scope">
+        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
+          Edit
+        </el-button>
+        <el-button
+          size="small"
+          type="danger"
+          @click="handleDelete(scope.$index, scope.row)"
+        >
+          Delete
+        </el-button>
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
+<script lang="ts" setup>
+import { computed, ref } from "vue";
+import My_Pagination from "../Pagination/my_Pagination.vue";
 
+import { ElConfigProvider } from "element-plus";
+import zhCn from "element-plus/es/locale/lang/zh-cn";
 
-<style scoped></style>
+interface User {
+  date: string;
+  name: string;
+  address: string;
+  total: string;
+  pageSize: string;
+  currentPage: string;
+}
+
+const search = ref("");
+const filterTableData = computed(() =>
+  tableData.filter(
+    (data) =>
+      !search.value || data.name.toLowerCase().includes(search.value.toLowerCase())
+  )
+);
+const handleEdit = (index: number, row: User) => {
+  console.log(index, row);
+};
+const handleDelete = (index: number, row: User) => {
+  console.log(index, row);
+};
+
+const tableData: User[] = [
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+    total: "50",
+    pageSize: "1",
+    currentPage: "2",
+  },
+
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+    total: "1",
+    pageSize: "1",
+    currentPage: "3",
+  },
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+    total: "1",
+    pageSize: "1",
+    currentPage: "4",
+  },
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+    total: "1",
+    pageSize: "1",
+    currentPage: "1",
+  },
+  {
+    date: "2016-05-03",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+    total: "1",
+    pageSize: "1",
+    currentPage: "1",
+  },
+];
+</script>
+<style scoped>
+.table-header {
+  width: 100;
+  height: 800px;
+}
+
+.table-pagination {
+  margin: 0 auto;
+}
+</style>

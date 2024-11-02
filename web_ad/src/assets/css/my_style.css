@@ -5,8 +5,9 @@
 	/* padding: 15px; */
 	overflow-x: hidden; /*防止水平滚动*/
 	background-color: white;
+	background-image: url('@/assets/img/top_img/left.jpg');
   }
-
+  
   @media screen and (min-width: 300px) {
 	html {
 	  /* width: calc(100vw - 2px); 减去2px是为了避免滚动条的影响 */

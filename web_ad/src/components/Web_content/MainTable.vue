@@ -32,13 +32,7 @@ const tableData = ref(Array.from({ length: 100 }).fill(item))
         </div>
       </el-header>
       
-    <!-- <div class="filter-container" style="margin-bottom: 20px">
-      <el-input maxlength="40" placeholder="用户名" style="width: 200px" v-model="searchContent"
-        @keyup.enter="handleFilter" />
-      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="searchContList">搜索</el-button>
-      <el-button class="filter-item" style="margin-left: 10px" type="primary" icon="el-icon-edit"
-        @click="handleCreate">新增用户</el-button>
-    </div> -->
+   
       <el-main>
         <el-scrollbar>
           <el-table :data="tableData">
@@ -51,14 +45,7 @@ const tableData = ref(Array.from({ length: 100 }).fill(item))
     </el-container>
   </el-container>
 
-  <!-- <div class="example-pagination-block">
-    <div class="example-demonstration">When you have few pages</div>
-    <el-pagination layout="prev, pager, next" :total="50" />
-  </div>
-  <div class="example-pagination-block">
-    <div class="example-demonstration">When you have more than 7 pages</div>
-    <el-pagination layout="prev, pager, next" :total="1000" />
-  </div> -->
+
 </template>
 
 

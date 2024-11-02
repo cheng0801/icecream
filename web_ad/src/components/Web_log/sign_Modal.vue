@@ -1,25 +1,32 @@
 <script setup>
-
-import my_log_in from './my_log_in.vue';
-
-
-
+import { RouterLink, RouterView } from "vue-router";
+import My_sign_in from "./my_sign_in.vue";
 
 const props = defineProps({
-  show: Boolean
-})
+  show: Boolean,
+});
 </script>
 
 <template>
   <Transition name="modal">
     <div v-if="show" class="modal-mask">
       <div class="modal-container">
-        <button class="modal-default-button" @click="$emit('close')"><el-icon><SwitchButton /></el-icon></button>
+        <span class="text">
+          <RouterLink active-class="abox" class="text" to="/log">登录</RouterLink></span
+        >
+        <RouterLink active-class="abox" class="text" to="/sign">注册</RouterLink>
+
+        <button class="modal-default-button" @click="$emit('close')">
+          <el-icon>
+            <SwitchButton />
+          </el-icon>
+        </button>
+
         <slot name="body">
-          <my_log_in />
+          <!-- <My_sign_in/> -->
+          <RouterView />
         </slot>
       </div>
-
     </div>
   </Transition>
 </template>
@@ -32,28 +39,37 @@ const props = defineProps({
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(17, 228, 200, 0.5);
+  background-color: rgba(17, 228, 200, 0.205);
   display: flex;
   transition: opacity 0.3s ease;
 }
 
 .modal-container {
-  width: 60%;
+  width: 45%;
+  height: 70%;
   margin: auto;
   padding: 20px 30px;
-  background-color: #3dcfd4;
+  background-color: rgb(212, 204, 204);
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
+  font-size: 35px;
 }
-
-
 
 .modal-default-button {
   float: right;
   top: 0;
 }
 
+.abox {
+  font-size: 50px;
+  color: black;
+  border-bottom: 3px solid orange;
+}
+
+.text {
+  text-decoration: none;
+}
 /*
  * 对于 transition="modal" 的元素来说
  * 当通过 Vue.js 切换它们的可见性时

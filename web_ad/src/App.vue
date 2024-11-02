@@ -1,4 +1,5 @@
 <script setup>
+import User_content from './components/Web_content/user_content/user_content.vue';
 import Web_Content from './page/Web_Content.vue';
 
 import Web_footer from './page/Web_footer.vue';
@@ -13,12 +14,19 @@ import Web_side_Images from './page/Web_side_Images.vue';
 <template>
 
   <div class="flex-container">
+  <!-- <RouterView /> -->
+    <User_content class="user-content"/>
     <Web_side_Images />
     <Web_Header class="header-z-index" />
+    
     <Web_Content class="content-z-index" />
     <Web_footer />
 
   </div>
+  
+  
+
+
 </template>
 
 <style scoped>
@@ -29,6 +37,7 @@ import Web_side_Images from './page/Web_side_Images.vue';
 
   margin: 0;
 }
+
 
 .header-z-index {
   z-index: 333;

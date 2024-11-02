@@ -22,15 +22,15 @@ const img4 = ref(true)
     <div class="right-container">
         <!--  <div v-show="img1" class="img-above">
          盒子一起消失，没有占位下面图片会向上-->
-
+         
         <div class="img-above">
             <span class="image-remove-view1" v-show="img1" @click="img1 = !img1">+</span>
-            <a href=""> <img v-if="img1" src="../assets/img/side/view1.jpg" class="cover-img"></a>
+            <a href=""> <img v-ifif="img1" src="@/assets/img/user/ys.jpg" class="cover-img"></a>
         </div>
 
         <div class="img-below">
             <span class="image-remove-view2" v-show="img2" @click="img2 = !img2">+</span>
-            <a href=""> <img v-if="img2" src="../assets/img/side/view2.jpg" class="cover-img"></a>
+            <a href=""> <img v-if="img2" src="@/assets/img/user/yx.jpg" class="cover-img"></a>
         </div>
     </div>
 
@@ -38,19 +38,19 @@ const img4 = ref(true)
 
         <div class="img-above">
             <span class="image-remove-home1" v-show="img3" @click="img3 = !img3">+</span>
-            <a href=""> <img v-if="img3" src="../assets/img/side/home1.jpg" class="cover-img"></a>
+            <a href=""> <img v-if="img3" src="@/assets/img/user/zs.jpg" class="cover-img"></a>
         </div>
 
         <div  class="img-below">
             <span class="image-remove-home2" v-show="img4" @click="img4 = !img4">+</span>
-            <a href=""> <img v-if="img4" src="../assets/img/side/home2.jpg" class="cover-img"></a>
+            <a href=""> <img v-if="img4" src="@/assets/img/user/zx.jpg" class="cover-img"></a>
         </div>
 
     </div>
 
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .img-above {
     /* background-color: aqua; */
     width: 100%;
@@ -114,7 +114,7 @@ img {
     cursor: pointer;
     opacity: 0.5;
     top: 1%;
-    left: 90%;
+    right: 5%;
     display: block;
     position: absolute;
 }
@@ -130,7 +130,7 @@ img {
     cursor: pointer;
     opacity: 0.5;
     top: 51%;
-    left: 90%;
+    right: 5%;
     display: block;
     position: absolute
 }
@@ -138,8 +138,8 @@ img {
 .right-container {
     margin-right: 0;
     right: 0;
-    width: 15%;
-    height: 100%;
+    width: 100px;
+    height: 600px;
     /* background-color: rgb(39, 42, 43); */
     position: fixed;
     z-index: 20;
@@ -148,8 +148,8 @@ img {
 .left-container {
     margin-left: 0;
     left: 0;
-    width: 15%;
-    height: 100%;
+    width: 100px;
+    height: 600px;
     /* background-color: rgb(17, 67, 204); */
     position: fixed;
     z-index: 20;
