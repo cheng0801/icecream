@@ -1,124 +1,94 @@
-<template>
-  <el-config-provider :locale="zhCn">
-    <el-pagination
-      v-model:current-page="currentPage4"
-      v-model:page-size="pageSize4"
-      :page-sizes="[100, 200, 300, 400]"
-      :size="size"
-      :disabled="disabled"
-      :background="background"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="400"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
-  </el-config-provider>
+<script setup>
+import { ref, reactive, onMounted, computed } from "vue";
 
-  <el-table :data="filterTableData" class="table-header" total="total">
-    <el-table-column label="Name" prop="name" />
-    <el-table-column label="Date" prop="date" />
-    
+onMounted(() => {
+  tableData.list = mockData.list;
+  tableData.total = mockData.total;
+});
+
+// 模拟数据
+const mockData = reactive({
+  list: [
+    { id: 1, name: "商品A", price: 100, stock: 50 },
+    { id: 2, name: "商品B", price: 200, stock: 30 },
+    { id: 3, name: "商品C", price: 150, stock: 40 },
+    // ....更多假数据
+  ],
+  total: 3,
+});
+
+// 参数一：当前页数
+// 参数二：每页数据条数
+const paginationData = reactive({
+  pageNum: 3,
+  pageSize: 10,
+});
+
+// 数据源
+const tableData = reactive({
+  list: [],
+  total: 0,
+});
+
+// 处理分页大小变化
+const handleSizeChange = (newSize) => {
+  paginationData.pageSize = newSize;
+  paginationData.pageNum = 1; // 重置为第一页
+  updateTableData();
+};
+
+// 处理当前页变化
+const handleCurrentChange = (newPage) => {
+  paginationData.pageNum = newPage;
+  updateTableData();
+};
+
+// 更新表格数据
+const updateTableData = () => {
+  const start = (paginationData.pageNum - 1) * paginationData.pageSize;
+  const end = start + paginationData.pageSize;
+  tableData.list = mockData.list.slice(start, end);
+  tableData.total = mockData.total;
+};
+const search = ref("");
+const filterTableData = computed(() =>
+mockData.list.filter(
+    (data) =>
+      !search.value ||
+      data.name.toLowerCase().includes(search.value.toLowerCase())
+  )
+)
+</script>
+
+<template>
+  <!-- 此处是table表单域，如果有不懂的可以看我的补充文档，在最底下 -->
+  <el-table :data="filterTableData" style="width: 100%">
+    <el-table-column prop="id" label="id" />
+    <el-table-column prop="name" label="商品名称" />
+    <el-table-column prop="stock" label="库存" />
     <el-table-column align="right">
       <template #header>
         <el-input v-model="search" size="small" placeholder="Type to search" />
       </template>
-      <template #default="scope">
-        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
-          Edit
-        </el-button>
-        <el-button
-          size="small"
-          type="danger"
-          @click="handleDelete(scope.$index, scope.row)"
-        >
-          Delete
-        </el-button>
-      </template>
-    </el-table-column>
+      </el-table-column>
   </el-table>
+  <!-- 此处就是展示分页的核心逻辑了 -->
+  <div class="pagination-info">
+    <el-pagination
+      v-model:current-page="paginationData.pageNum"
+      :page-size="paginationData.pageSize"
+      :size="small"
+      :background="background"
+      layout="total, prev, pager, next, jumper"
+      :total="tableData.total"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
+  </div>
 </template>
 
-<script lang="ts" setup>
-import { computed, ref } from "vue";
-import My_Pagination from "../Pagination/my_Pagination.vue";
-
-import { ElConfigProvider } from "element-plus";
-import zhCn from "element-plus/es/locale/lang/zh-cn";
-
-interface User {
-  date: string;
-  name: string;
-  address: string;
-  total: string;
-  pageSize: string;
-  currentPage: string;
-}
-
-const search = ref("");
-const filterTableData = computed(() =>
-  tableData.filter(
-    (data) =>
-      !search.value || data.name.toLowerCase().includes(search.value.toLowerCase())
-  )
-);
-const handleEdit = (index: number, row: User) => {
-  console.log(index, row);
-};
-const handleDelete = (index: number, row: User) => {
-  console.log(index, row);
-};
-
-const tableData: User[] = [
-  {
-    date: "2016-05-03",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-    total: "50",
-    pageSize: "1",
-    currentPage: "2",
-  },
-
-  {
-    date: "2016-05-03",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-    total: "1",
-    pageSize: "1",
-    currentPage: "3",
-  },
-  {
-    date: "2016-05-03",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-    total: "1",
-    pageSize: "1",
-    currentPage: "4",
-  },
-  {
-    date: "2016-05-03",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-    total: "1",
-    pageSize: "1",
-    currentPage: "1",
-  },
-  {
-    date: "2016-05-03",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-    total: "1",
-    pageSize: "1",
-    currentPage: "1",
-  },
-];
-</script>
-<style scoped>
-.table-header {
-  width: 100;
-  height: 800px;
-}
-
-.table-pagination {
-  margin: 0 auto;
+<style>
+.pagination-info {
+  text-align: center;
 }
 </style>
