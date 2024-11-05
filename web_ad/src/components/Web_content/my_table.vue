@@ -1,6 +1,9 @@
 <script setup>
 import { ref, reactive, onMounted, computed } from "vue";
 
+import { ElConfigProvider } from "element-plus";
+import zhCn from "element-plus/es/locale/lang/zh-cn";
+
 onMounted(() => {
   tableData.list = mockData.list;
   tableData.total = mockData.total;
@@ -20,8 +23,8 @@ const mockData = reactive({
 // 参数一：当前页数
 // 参数二：每页数据条数
 const paginationData = reactive({
-  pageNum: 3,
-  pageSize: 10,
+  pageNum: 1,
+  pageSize: 1,
 });
 
 // 数据源
@@ -35,12 +38,15 @@ const handleSizeChange = (newSize) => {
   paginationData.pageSize = newSize;
   paginationData.pageNum = 1; // 重置为第一页
   updateTableData();
+  // console.log(updateTableData());
+  // console.log((paginationData.pageSize = newSize));
 };
 
 // 处理当前页变化
 const handleCurrentChange = (newPage) => {
   paginationData.pageNum = newPage;
   updateTableData();
+  // console.log(paginationData.pageNum);
 };
 
 // 更新表格数据
@@ -49,15 +55,18 @@ const updateTableData = () => {
   const end = start + paginationData.pageSize;
   tableData.list = mockData.list.slice(start, end);
   tableData.total = mockData.total;
+  // console.log("\\\\");
+  // console.log(start);
+  // console.log(end);
+  // console.log(tableData.list);
 };
 const search = ref("");
 const filterTableData = computed(() =>
-mockData.list.filter(
+  tableData.list.filter(
     (data) =>
-      !search.value ||
-      data.name.toLowerCase().includes(search.value.toLowerCase())
+      !search.value || data.name.toLowerCase().includes(search.value.toLowerCase())
   )
-)
+);
 </script>
 
 <template>
@@ -70,25 +79,24 @@ mockData.list.filter(
       <template #header>
         <el-input v-model="search" size="small" placeholder="Type to search" />
       </template>
-      </el-table-column>
+    </el-table-column>
   </el-table>
-  <!-- 此处就是展示分页的核心逻辑了 -->
-  <div class="pagination-info">
-    <el-pagination
-      v-model:current-page="paginationData.pageNum"
-      :page-size="paginationData.pageSize"
-      :size="small"
-      :background="background"
-      layout="total, prev, pager, next, jumper"
-      :total="tableData.total"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
-  </div>
+
+  <el-config-provider :locale="zhCn">
+    <!-- 此处就是展示分页的核心逻辑了 -->
+    <div >
+      <el-pagination
+        v-model:current-page="paginationData.pageNum"
+        :page-size="paginationData.pageSize"
+        layout="total,sizes, prev, pager, next, jumper"
+        :total="tableData.total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
+  </el-config-provider>
 </template>
 
-<style>
-.pagination-info {
-  text-align: center;
-}
+<style  scoped>
+
 </style>

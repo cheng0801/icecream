@@ -15,7 +15,7 @@ import Log_img from './log_img.vue';
     <el-container class="box">
    
    <!-- <Log_img class="log"/> -->
-      <user_side_Images style="z-index: 9999;"/>
+      <user_side_Images/>
       <el-header><El_header /></el-header>
       <el-container>
         <El_aside />

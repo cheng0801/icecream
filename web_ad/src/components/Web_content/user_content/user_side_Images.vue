@@ -25,7 +25,7 @@ const img4 = ref(true)
          
         <div class="img-above">
             <span class="image-remove-view1" v-show="img1" @click="img1 = !img1">+</span>
-            <a href=""> <img v-ifif="img1" src="@/assets/img/user/ys.jpg" class="cover-img"></a>
+            <a href=""> <img v-if="img1" src="@/assets/img/user/ys.jpg" class="cover-img"></a>
         </div>
 
         <div class="img-below">
