@@ -32,4 +32,14 @@ import User_content from "@/components/Web_content/user_content/user_content.vue
 .my-table {
   padding: 20px;
 }
+
+.content {
+  z-index: 1;
+  /* background-color: #ccb4ce; */
+  margin: 176px 0 0 0;
+  width: 70%;
+  align-self: center;
+
+  flex: 1;
+}
 </style>

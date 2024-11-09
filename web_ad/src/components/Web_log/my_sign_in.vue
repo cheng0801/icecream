@@ -7,17 +7,7 @@ const sign = ref(true);
 
 const ruleFormRef = ref<FormInstance>();
 
-// const validateId = (rule: any, value: any, callback: any) => {
-//     if (value === '') {
-//         callback(new Error('请输入账号'))
-//     } else {
-//         if (ruleForm.id !== '' ) {
-//             if (!ruleFormRef.value) return
-//             ruleFormRef.value.validateField('id')
-//         }
-//         callback()
-//     }
-// }
+
 const validatePass = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入密码"));
@@ -39,10 +29,7 @@ const validatePass2 = (rule: any, value: any, callback: any) => {
   }
 };
 
-// computed(() => {
-//         const regex = /^[a-zA-Z][a-zA-Z0-9_]{5,29}$/;
-//         return regex.test(ruleForm.value);
-//     })
+
 const ruleForm = reactive({
   id: "",
   pass: "",

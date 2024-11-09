@@ -9,7 +9,7 @@ const props = defineProps({
 
 <template>
   <Transition name="modal">
-    <div v-if="show" class="modal-mask">
+    <div v-show="show" class="modal-mask">
       <div class="modal-container">
         <span class="text">
           <RouterLink active-class="abox" class="text" to="/log">登录</RouterLink></span

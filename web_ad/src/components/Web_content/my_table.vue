@@ -1,93 +1,96 @@
 <script setup>
-import { ref, reactive, onMounted, computed } from "vue";
-
+import { reactive, onMounted, ref, computed } from "vue";
+import axios from "axios";
 import { ElConfigProvider } from "element-plus";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 
-onMounted(() => {
-  tableData.list = mockData.list;
-  tableData.total = mockData.total;
+const userInfo = reactive({
+  list: [],
+  // 假设后端会返回total字段来表示总记录数
+  // total: 0, // 这行暂时保留，但应该从后端获取
 });
 
-// 模拟数据
-const mockData = reactive({
-  list: [
-    { id: 1, name: "商品A", price: 100, stock: 50 },
-    { id: 2, name: "商品B", price: 200, stock: 30 },
-    { id: 3, name: "商品C", price: 150, stock: 40 },
-    // ....更多假数据
-  ],
-  total: 3,
-});
-
-// 参数一：当前页数
-// 参数二：每页数据条数
 const paginationData = reactive({
-  pageNum: 1,
-  pageSize: 1,
+  pageNum: 1, //页码
+  pageSize: 10, //每页多少条
 });
 
-// 数据源
 const tableData = reactive({
   list: [],
-  total: 0,
+  total: 0, // 初始化total为0，稍后从后端获取或计算
 });
 
-// 处理分页大小变化
+const search = ref("");
+
+//异步
+async function fetchUserInfo() {
+  try {
+    const res = await axios.get("http://localhost:3000/users");
+
+    userInfo.list = res.data /*|| res.data*/; // 假设后端返回的数据中有一个items字段，或者直接是数据数组
+
+    tableData.total = res.data.total || userInfo.list.length; // 从后端获取total，或者如果后端不提供，则使用列表长度（但这通常不是正确的做法，因为列表可能只包含当前页的数据）
+    // console.log(userInfo.list);
+    updateTableData();
+  } catch (error) {
+    console.error("Error fetching user info:", error);
+    throw error;
+  }
+}
+
 const handleSizeChange = (newSize) => {
   paginationData.pageSize = newSize;
-  paginationData.pageNum = 1; // 重置为第一页
+  paginationData.pageNum = 1;
   updateTableData();
-  // console.log(updateTableData());
-  // console.log((paginationData.pageSize = newSize));
 };
 
-// 处理当前页变化
 const handleCurrentChange = (newPage) => {
   paginationData.pageNum = newPage;
   updateTableData();
-  // console.log(paginationData.pageNum);
 };
 
-// 更新表格数据
 const updateTableData = () => {
   const start = (paginationData.pageNum - 1) * paginationData.pageSize;
   const end = start + paginationData.pageSize;
-  tableData.list = mockData.list.slice(start, end);
-  tableData.total = mockData.total;
-  // console.log("\\\\");
-  // console.log(start);
-  // console.log(end);
-  // console.log(tableData.list);
+
+  tableData.list = userInfo.list.slice(start, end);
+  
 };
-const search = ref("");
+
 const filterTableData = computed(() =>
   tableData.list.filter(
     (data) =>
-      !search.value || data.name.toLowerCase().includes(search.value.toLowerCase())
+      !search.value || data.username?.toLowerCase().includes(search.value.toLowerCase())
   )
 );
+onMounted(() => {
+  fetchUserInfo();
+});
 </script>
 
 <template>
-  <!-- 此处是table表单域，如果有不懂的可以看我的补充文档，在最底下 -->
-  <el-table :data="filterTableData" style="width: 100%">
-    <el-table-column prop="id" label="id" />
-    <el-table-column prop="name" label="商品名称" />
-    <el-table-column prop="stock" label="库存" />
-    <el-table-column align="right">
-      <template #header>
-        <el-input v-model="search" size="small" placeholder="Type to search" />
-      </template>
-    </el-table-column>
-  </el-table>
-
   <el-config-provider :locale="zhCn">
-    <!-- 此处就是展示分页的核心逻辑了 -->
-    <div >
+    <el-table :data="filterTableData" style="width: 100%">
+      <el-table-column prop="id" label="ID" />
+      <el-table-column prop="username" label="用户名">
+        <template #default="scope">
+          <router-link class="route-link" :to="{ path: '/user/' + scope.row.id }">
+            {{ scope.row.username }}
+          </router-link>
+        </template>
+      </el-table-column>
+      <el-table-column prop="title" label="主题" />
+      <el-table-column align="right">
+        <template #header>
+          <el-input v-model="search" size="small" placeholder="查找" />
+        </template>
+      </el-table-column>
+    </el-table>
+    <div>
       <el-pagination
         v-model:current-page="paginationData.pageNum"
         :page-size="paginationData.pageSize"
+        :page-sizes="[10, 20, 30, 40]"
         layout="total,sizes, prev, pager, next, jumper"
         :total="tableData.total"
         @size-change="handleSizeChange"
@@ -97,6 +100,9 @@ const filterTableData = computed(() =>
   </el-config-provider>
 </template>
 
-<style  scoped>
-
+<style scoped>
+.route-link {
+  text-decoration: none;
+  color: rgb(95, 90, 90);
+}
 </style>

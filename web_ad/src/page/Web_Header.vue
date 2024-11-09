@@ -43,10 +43,18 @@ import Web_signin from "@/components/Web_log/Web_signin.vue";
   linear-gradient(rgba(255, 255, 255, 0.5), 
    rgba(255, 255, 255, 0.5)), 
    url('@/assets/img/header.png');
-
+   z-index: 333;
+  /* background-color: #3498db; */
+  width: 70%;
+  height: 180px;
+  position: fixed;
+  align-self: center;
 }
 
+
+
 .Web-nav {
+  height: 40px;
   position: absolute;
   margin: 100px;
 }
