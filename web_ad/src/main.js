@@ -2,15 +2,17 @@ import './assets/css/my_style.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './route'
-
+import pinia from './stores'
 const app = createApp(App)
 
 app.use(router)
 
+app.use(pinia)
+
 import 'element-plus/dist/index.css'
 import ElementPlus from 'element-plus'
 
-// 中文
+// 语言转换： 中文
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 app.use(ElementPlus, { size: 'small', zIndex: 3000 }, {
   locale: zhCn,

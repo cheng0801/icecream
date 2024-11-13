@@ -1,4 +1,62 @@
-<script lang="ts" setup>
+<template>
+    <div class="login-bg">
+        <div class="login-container">
+            <div class="login-header">
+                <img class="logo mr10" src="../../assets/img/logo.svg" alt="" />
+                <div class="login-title">后台管理系统</div>
+            </div>
+             <el-form
+      ref="ruleFormRef"
+      style="max-width: 600px"
+      :model="ruleForm"
+      status-icon
+      :rules="rules"
+      label-width="auto"
+      class="demo-ruleForm"
+    >
+      <el-form-item label="账号" prop="id">
+        <!-- autocomplete 是否显示 * -->
+        <el-input v-model="ruleForm.username" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="密码" prop="pass">
+        <el-input v-model="ruleForm.pass" type="password" autocomplete="on" />
+      </el-form-item>
+      <el-form-item label="确认密码" prop="checkPass">
+        <el-input v-model="ruleForm.checkPass" type="password" autocomplete="off" />
+      </el-form-item>
+      <!-- <el-form-item label="电话" prop="tele">
+        <el-input v-model.number="ruleForm.tele" />
+      </el-form-item> -->
+      <el-form-item label="邮箱" type="email" prop="e_mail">
+        <el-input v-model.number="ruleForm.e_mail" />
+      </el-form-item>
+      <el-form-item label="">
+        <div class="mouse">
+          <input type="checkbox" v-model="ruleForm.ischeck" />
+          已阅读并同意 <span>用户协议</span>和<span>隐私政策</span>
+        </div>
+      </el-form-item>
+
+      <el-form-item>
+        <el-button @click="submitForm(ruleFormRef)"> 注册 </el-button>
+        <el-button @click="resetForm(ruleFormRef)">重填</el-button>
+      </el-form-item>
+    </el-form>
+                <div class="pwd-tips">
+                    <el-checkbox class="pwd-checkbox" v-model="checked" label="记住密码" />
+                    <el-link type="primary" @click="$router.push('/reset-pwd')">忘记密码</el-link>
+                </div>
+                <el-button class="login-btn" type="primary" size="large" @click="submitForm(login)">登录</el-button>
+                <p class="login-tips">Tips : 用户名和密码随便填。</p>
+                <p class="login-text">
+                    没有账号？<el-link type="primary" @click="$router.push('/register')">立即注册</el-link>
+                </p>
+            </el-form>
+        </div>
+    </div>
+</template>
+
+<script setup lang="ts">
 import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import request from "@/utils/request";
@@ -154,58 +212,69 @@ const resetForm = (formEl: FormInstance | undefined) => {
 };
 </script>
 
-<template>
-  <div v-show="sign" class="home">
-    <el-form
-      ref="ruleFormRef"
-      style="max-width: 600px"
-      :model="ruleForm"
-      status-icon
-      :rules="rules"
-      label-width="auto"
-      class="demo-ruleForm"
-    >
-      <el-form-item label="账号" prop="id">
-        <!-- autocomplete 是否显示 * -->
-        <el-input v-model="ruleForm.username" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="密码" prop="pass">
-        <el-input v-model="ruleForm.pass" type="password" autocomplete="on" />
-      </el-form-item>
-      <el-form-item label="确认密码" prop="checkPass">
-        <el-input v-model="ruleForm.checkPass" type="password" autocomplete="off" />
-      </el-form-item>
-      <!-- <el-form-item label="电话" prop="tele">
-        <el-input v-model.number="ruleForm.tele" />
-      </el-form-item> -->
-      <el-form-item label="邮箱" type="email" prop="e_mail">
-        <el-input v-model.number="ruleForm.e_mail" />
-      </el-form-item>
-      <el-form-item label="">
-        <div class="mouse">
-          <input type="checkbox" v-model="ruleForm.ischeck" />
-          已阅读并同意 <span>用户协议</span>和<span>隐私政策</span>
-        </div>
-      </el-form-item>
-
-      <el-form-item>
-        <el-button @click="submitForm(ruleFormRef)"> 注册 </el-button>
-        <el-button @click="resetForm(ruleFormRef)">重填</el-button>
-      </el-form-item>
-    </el-form>
-  </div>
-</template>
-
 <style scoped>
-.demo-ruleForm {
-  margin: 10% auto;
+.login-bg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    background: url(../../assets/img/login-bg.jpg) center/cover no-repeat;
 }
 
-.el-button {
-  margin: 0 auto;
+.login-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
 }
 
-.mouse {
-  margin: 0 auto;
+.logo {
+    width: 35px;
+}
+
+.login-title {
+    font-size: 22px;
+    color: #333;
+    font-weight: bold;
+}
+
+.login-container {
+    width: 450px;
+    border-radius: 5px;
+    background: #fff;
+    padding: 40px 50px 50px;
+    box-sizing: border-box;
+}
+
+.pwd-tips {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    margin: -10px 0 10px;
+    color: #787878;
+}
+
+.pwd-checkbox {
+    height: auto;
+}
+
+.login-btn {
+    display: block;
+    width: 100%;
+}
+
+.login-tips {
+    font-size: 12px;
+    color: #999;
+}
+
+.login-text {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #787878;
 }
 </style>

@@ -1,9 +1,105 @@
-<script lang="ts" setup>
-import { reactive, ref } from "vue";
-import type { FormInstance, FormRules } from "element-plus";
-import request from "@/utils/request";
-import router from "@/route";
+<template>
+  <div class="login-bg">
+    <div class="login-container">
+      <div class="login-header">
+        <img class="logo mr10" src="@/assets/img/logo.svg" alt="" />
+        <div class="login-title">公益特色</div>
+      </div>
+      <el-form
+        ref="ruleFormRef"
+        style="max-width: 600px"
+        :model="ruleForm"
+        status-icon
+        :rules="rules"
+        label-width="auto"
+        class="demo-ruleForm"
+        size="large"
+      >
+        <el-form-item prop="username">
+          <!-- autocomplete 是否显示 * -->
+          <el-input v-model="ruleForm.username" autocomplete="off" placeholder="用户名">
+            <template #prepend>
+              <el-icon>
+                <User />
+              </el-icon>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="pass">
+          <el-input
+            v-model="ruleForm.pass"
+            type="password"
+            autocomplete="on"
+            placeholder="密码"
+          >
+            <template #prepend>
+              <el-icon>
+                <Lock />
+              </el-icon>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="checkPass">
+          <el-input
+            v-model="ruleForm.checkPass"
+            type="password"
+            autocomplete="on"
+            placeholder="请确认密码"
+          >
+            <template #prepend>
+              <el-icon>
+                <Lock />
+              </el-icon>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item type="email" prop="e_mail">
+          <el-input v-model.number="ruleForm.e_mail" placeholder="邮箱">
+            <template #prepend>
+              <el-icon>
+                <Message />
+              </el-icon>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item class="mouse">
+          <div>
+            <input type="checkbox" v-model="ruleForm.ischeck" />
+            已阅读并同意 <span>用户协议</span>和<span>隐私政策</span>
+          </div>
+        </el-form-item>
+        <div class="btn">
+          <el-button
+            class="login-btn"
+            type="primary"
+            size="large"
+            @click="submitForm(ruleFormRef)"
+            >注册</el-button
+          >
+          <el-button class="login-btn" size="large" @click="resetForm(ruleFormRef)"
+            >重填</el-button
+          >
+        </div>
+        <p class="login-text">
+          已有账号，<el-link type="primary" @click="$router.push('/log')"
+            >立即登录</el-link
+          >
+        </p>
+      </el-form>
+    </div>
+  </div>
+</template>
 
+<script setup lang="ts">
+import { ref, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
+
+
+import request from "@/utils/request";
+// import router from "@/route";
+
+const router = useRouter(); 
 const sign = ref(true);
 
 const ruleFormRef = ref<FormInstance>();
@@ -33,7 +129,6 @@ const ruleForm = reactive({
   username: "",
   pass: "",
   checkPass: "",
-  tele: "",
   e_mail: "",
   ischeck: false,
 });
@@ -130,8 +225,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         });
 
         // 根据后端的响应处理结果
-        if (response.data.success) {
-          alert("注册成功!");
+        if (valid/*response.data.success*/) {
+            ElMessage.success('注册成功，请登录')
           // 可能需要执行其他操作，如跳转到登录页面
         } else {
           alert("注册失败: " + response.data.message);
@@ -154,58 +249,63 @@ const resetForm = (formEl: FormInstance | undefined) => {
 };
 </script>
 
-<template>
-  <div v-show="sign" class="home">
-    <el-form
-      ref="ruleFormRef"
-      style="max-width: 600px"
-      :model="ruleForm"
-      status-icon
-      :rules="rules"
-      label-width="auto"
-      class="demo-ruleForm"
-    >
-      <el-form-item label="账号" prop="id">
-        <!-- autocomplete 是否显示 * -->
-        <el-input v-model="ruleForm.username" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="密码" prop="pass">
-        <el-input v-model="ruleForm.pass" type="password" autocomplete="on" />
-      </el-form-item>
-      <el-form-item label="确认密码" prop="checkPass">
-        <el-input v-model="ruleForm.checkPass" type="password" autocomplete="off" />
-      </el-form-item>
-      <!-- <el-form-item label="电话" prop="tele">
-        <el-input v-model.number="ruleForm.tele" />
-      </el-form-item> -->
-      <el-form-item label="邮箱" type="email" prop="e_mail">
-        <el-input v-model.number="ruleForm.e_mail" />
-      </el-form-item>
-      <el-form-item label="">
-        <div class="mouse">
-          <input type="checkbox" v-model="ruleForm.ischeck" />
-          已阅读并同意 <span>用户协议</span>和<span>隐私政策</span>
-        </div>
-      </el-form-item>
-
-      <el-form-item>
-        <el-button @click="submitForm(ruleFormRef)"> 注册 </el-button>
-        <el-button @click="resetForm(ruleFormRef)">重填</el-button>
-      </el-form-item>
-    </el-form>
-  </div>
-</template>
-
-<style scoped>
-.demo-ruleForm {
-  margin: 10% auto;
+<style lang="scss" scoped>
+.login-bg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  background: url(@/assets/img/login-bg.jpg) center/cover no-repeat;
 }
 
-.el-button {
-  margin: 0 auto;
+.login-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.logo {
+  width: 35px;
+}
+
+.login-title {
+  font-size: 22px;
+  color: #333;
+  font-weight: bold;
+}
+
+.login-container {
+  width: 450px;
+  border-radius: 5px;
+  background: #fff;
+  padding: 40px 50px 50px;
+  box-sizing: border-box;
 }
 
 .mouse {
-  margin: 0 auto;
+  margin-top: -25px;
+  float: right;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  //  background-color: aqua;
+  .login-btn {
+    display: block;
+    width: 25%;
+  }
+}
+
+.login-text {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #787878;
 }
 </style>

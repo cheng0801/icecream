@@ -2,16 +2,20 @@ x
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
+import request from "@/utils/request";
+import { useRouter } from "vue-router";
 
 const ruleFormRef = ref<FormInstance>();
+
+const router = useRouter();
 
 const validateId = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入账号"));
   } else {
-    if (ruleForm.id !== "") {
+    if (ruleForm.username !== "") {
       if (!ruleFormRef.value) return;
-      ruleFormRef.value.validateField("id");
+      ruleFormRef.value.validateField("username");
     }
     callback();
   }
@@ -37,12 +41,8 @@ const validatePass2 = (rule: any, value: any, callback: any) => {
   }
 };
 
-// computed(() => {
-//         const regex = /^[a-zA-Z][a-zA-Z0-9_]{5,29}$/;
-//         return regex.test(ruleForm.value);
-//     })
 const ruleForm = reactive({
-  id: "",
+  username: "",
   pass: "",
   checkPass: "",
   // tele: "",
@@ -50,7 +50,7 @@ const ruleForm = reactive({
 });
 
 const rules = reactive<FormRules<typeof ruleForm>>({
-  id: [
+  username: [
     { validator: validatePass, trigger: "blur" },
     { required: true, message: "请输入账号", trigger: "blur" },
     {
@@ -101,18 +101,43 @@ const rules = reactive<FormRules<typeof ruleForm>>({
   // ],
 });
 
-const submitForm = (formEl: FormInstance | undefined) => {
+const submitForm = async (formEl: FormInstance | undefined) => {
   if (ruleForm.ischeck === true) {
     if (!formEl) return;
-    formEl.validate((valid) => {
-      if (valid) {
-        alert("登录成功!");
-      } else {
-        alert("登录失败");
-      }
-    });
+    try {
+      // 触发表单验证
+      await formEl.validate(async (valid) => {
+        if (valid) {
+          // 如果验证通过，发送登录请求
+
+          const response = await request.post("users", {
+            username: ruleForm.username,
+            password: ruleForm.pass,
+          });
+
+          // 处理响应
+          if (valid /*response.data.success*/) {
+            // 登录成功，可以根据需要跳转到其他页面或显示成功消息
+            alert("登录成功!");
+            // 例如，使用 vue-router 跳转
+            router.push({ name: "home" });
+          } else {
+            // 登录失败，显示错误信息
+            alert("登录失败: " + response.data.message);
+          }
+        } else {
+          // 验证失败，显示验证错误信息
+          alert("登录失败，请检查表单输入。");
+        }
+      });
+    } catch (error) {
+      // 处理请求错误
+      console.error("登录时发生错误:", error);
+      alert("登录失败，请稍后重试。");
+    }
   } else {
-    alert("请阅读用户协议");
+    // 未同意用户协议，显示提示信息
+    alert("请阅读并同意用户协议。");
   }
 };
 
@@ -133,8 +158,8 @@ const resetForm = (formEl: FormInstance | undefined) => {
       label-width="auto"
       class="demo-ruleForm"
     >
-      <el-form-item label="账号" prop="id">
-        <el-input v-model="ruleForm.id" autocomplete="off" />
+      <el-form-item label="账号" prop="username">
+        <el-input v-model="ruleForm.username" autocomplete="off" />
       </el-form-item>
       <el-form-item label="密码" prop="pass">
         <el-input v-model="ruleForm.pass" type="password" autocomplete="on" />

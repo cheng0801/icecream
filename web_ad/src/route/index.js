@@ -14,30 +14,30 @@ const routes = [
         path: '/',
         name: 'home',
         component: Web_layout,
-        children: [
-            {
-                path: '/sign',
-                name: "sign",
+        // children: [
+        //     {
+        //         path: '/sign',
+        //         name: "sign",
+        //         // 箭头函数：懒加载 调用的时候加载
+        //         component: () => import('../components/Web_log/my_sign_in.vue'),
 
-                component: () => import('../components/Web_log/my_sign_in.vue'),
+        //     },
+        //     {
+        //         path: '/log',
+        //         name: "log",
 
-            },
-            {
-                path: '/log',
-                name: "log",
-                
 
-                component: () =>
-                    import('../components/Web_log/my_log_in.vue')
-            },
-            // 设置一个默认路由（索引路由）
-            {
-                path: '', // 空字符串表示默认路由
-                name: 'homelog',
-                redirect: '/log', // 重定向到 /log 路由
-            },
+        //         component: () =>
+        //             import('../components/Web_log/my_log_in.vue')
+        //     },
+        //     // 设置一个默认路由（索引路由）
+        //     {
+        //         path: '', // 空字符串表示默认路由
+        //         name: 'homelog',
+        //         redirect: '/log', // 重定向到 /log 路由
+        //     },
 
-        ]
+        // ]
     },
     {
         path: '/user/:id',
@@ -47,7 +47,25 @@ const routes = [
 
     },
 
+    {
+        path: "/log",
+        component: () =>
+            import('../page/log_in.vue')
 
+    },
+    {
+        path: "/sign",
+        component: () =>
+            import('../page/sign_in.vue')
+
+    },
+// NOT_FOUND页面
+    {
+        path: "/:pathMatch(.*)*",
+        component: () =>
+            import('../page/NOT_FOUND.vue')
+
+    }
 ]
 // {
 //     path: '/',

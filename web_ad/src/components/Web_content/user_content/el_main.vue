@@ -1,24 +1,29 @@
 <script setup>
 import { ref,  } from "vue";
-import axios from "axios";
-fetchUserInfo();
+// import axios from "axios";
+// fetchUserInfo();
 const userInfo = ref([]);
 
-async function fetchUserInfo() {
-  try {
-    const res = await axios.get("http://localhost:3000/users");
+// import requst from '../../utils/request'
+// requst.get().then() => { 
+// userInfo.value = res.data
+// }
 
-    // console.log(res);
-    userInfo.value = res.data;
+// async function fetchUserInfo() {
+//   try {
+//     const res = await axios.get("http://localhost:3000/users");
 
-    console.log(userInfo);
-    // 现在你可以在这里使用 userInfo，或者将它返回给调用者
-  } catch (error) {
-    console.error("Error fetching user info:", error);
-    // 可以选择在这里抛出一个错误，或者返回一个默认值/错误对象
-    throw error;
-  }
-}
+//     // console.log(res);
+//     userInfo.value = res.data;
+
+//     console.log(userInfo);
+//     // 现在你可以在这里使用 userInfo，或者将它返回给调用者
+//   } catch (error) {
+//     console.error("Error fetching user info:", error);
+//     // 可以选择在这里抛出一个错误，或者返回一个默认值/错误对象
+//     throw error;
+//   }
+// }
 
 // 调用函数并处理结果
 // fetchUserInfo()
