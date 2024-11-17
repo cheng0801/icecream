@@ -1,56 +1,49 @@
 <script setup>
-import { ref,  } from "vue";
-// import axios from "axios";
-// fetchUserInfo();
-const userInfo = ref([]);
-
-// import requst from '../../utils/request'
-// requst.get().then() => { 
-// userInfo.value = res.data
-// }
-
-// async function fetchUserInfo() {
-//   try {
-//     const res = await axios.get("http://localhost:3000/users");
-
-//     // console.log(res);
-//     userInfo.value = res.data;
-
-//     console.log(userInfo);
-//     // 现在你可以在这里使用 userInfo，或者将它返回给调用者
-//   } catch (error) {
-//     console.error("Error fetching user info:", error);
-//     // 可以选择在这里抛出一个错误，或者返回一个默认值/错误对象
-//     throw error;
-//   }
-// }
-
-// 调用函数并处理结果
-// fetchUserInfo()
-//   .then((userInfo) => {
-//     console.log(userInfo);
-//   })
-//   .catch((error) => {
-//     // 处理错误
-//     console.error("Error handling user info:", error);
-//   });
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import Wang_Editer from "@/components/Wang_Editer.vue";
+const route = useRoute;
+const id = route.params;
+console.log(id);
 </script>
 
 <template>
-  <div class="my-top">
-    <!-- <span>{{ userInfo.data.list }}</span> -->
-  </div>
-  <div class="my-line"></div>
-  <!-- <div class="my-content">{{  }}</div> -->
+  <el-main>
+    <el-container class="box">
+      <div class="my-top">
+        <span>{{}}test</span>
+      </div>
+      <div class="my-line"></div>
+      <div class="my-content">{{}}test1
+      <Wang_Editer/>
+      </div>
+    </el-container>
+  </el-main>
 </template>
 
 <style lang="scss" scoped>
 .el-main {
+  width: 80%;
+
+  background-color: aquamarine;
   padding: 0;
   margin: 0;
 }
+.box {
+  display: flex;
+  flex-direction: column; /* 设置为列方向布局 */
+  align-items: center; /* 实现水平居中（在列布局中主要用于子项垂直对齐，但此处配合flex-direction: column使用，确保内容不紧贴边缘） */
+  height: 100%; /* 设置容器高度为视口高度 */
+  width: 100%; /* 确保容器宽度充满父元素 */
+  padding: 10px; /* 可选：为内容添加内边距 */
+  left: 0;
+  box-sizing: border-box; /* 确保内边距和边框不会增加额外宽度 */
+  font-size: 20px;
+  overflow-x: hidden;
+  width: 100%;
+}
 .my-top {
-  height: 43px;
+  height: 40px;
   width: 100%;
 
   span {

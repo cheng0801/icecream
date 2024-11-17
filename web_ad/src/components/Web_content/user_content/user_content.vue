@@ -1,29 +1,27 @@
 <script setup>
 import user_side_Images from "./user_side_Images.vue";
 import El_aside from "./el_aside.vue";
-import El_footer from "./el_footer.vue";
+// import El_footer from "./el_footer.vue";
 import El_header from "./el_header.vue";
-import El_main from "./el_main.vue";
-import Web_Header from "@/page/Web_Header.vue";
 
+import Web_Header from "@/page/Web_Header.vue";
+import El_main from "./el_main.vue";
 </script>
 
 <template>
   <el-container class="box">
-  <!-- <div class="web-header">
-    <Web_Header />
-  </div> -->
-
     <user_side_Images />
-    <el-container class="user-content">
-      <el-header><El_header /></el-header>
-      <el-container>
-        <El_aside />
-
+    <el-container class="main-box">
+      <el-container class="web-header-container">
+        <Web_Header class="centered-header" />
+      </el-container>
+      <el-container class="user-content">
+        <El_header />
         <el-container>
-          <el-main><El_main /> <router-view></router-view></el-main>
-          <el-footer><El_footer /></el-footer>
+          <El_aside />
+          <El_main />
         </el-container>
+        <El_footer />
       </el-container>
     </el-container>
   </el-container>
@@ -31,35 +29,53 @@ import Web_Header from "@/page/Web_Header.vue";
 
 <style lang="scss" scoped>
 .box {
-  height: 100%;
   width: 100%;
+
+  display: flex;
+  align-items: center; // 垂直居中
+  justify-content: center; // 水平居中
+  flex-direction: column; // 明确指定为列方向布局
   background-image: url("@/assets/img/user/bgi.jpg");
 }
 
-// .web-header {
-//   height: 180px;
-//   width: 900px;
-//   background-color: blueviolet;
-// }
+.main-box {
+  display: flex;
+  flex-direction: column; // 明确指定为列方向布局
+  padding: 0;
+  justify-content: center; // 水平居中
+  background-color: red;
+  width: 78%;
+}
+
+.web-header-container {
+  position: fixed; // 固定在视窗顶部
+  top: 0; // 距离视窗顶部 0px
+  left: 10%; // 通常也需要设置 left 或 right 来确保水平位置（根据需求调整）
+  right: 10%; // 如果希望容器宽度覆盖整个视窗宽度，则与 left: 0 配合使用 right: 0（或者设置 width: 100%）
+  // 如果不希望覆盖整个宽度，可以设置一个具体的宽度，并使用 margin: auto; 或左右 padding 来居中
+  z-index: 1000; // 确保该容器在其他内容之上（根据需要调整 z-index 值）
+  display: flex;
+  align-items: center; // 垂直居中
+  justify-content: center; // 水平居中
+  height: 70px;
+  background-color: blueviolet; // 背景色
+  .centered-header {
+    width: 80%;
+  }
+}
+
 .user-content {
-  margin-top: 180px;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column; // 列方向布局
+  width: 100%; // 占据全部可用宽度
 }
-.el-aside {
-  margin-left: 103px;
-  height: 500px;
-  overflow-y: hidden;
-  background-color: rgb(240, 234, 234);
+.test {
+  .user-content {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column; // 列方向布局
+    width: 100%; // 占据全部可用宽度
+  }
 }
-.el-main {
-  padding: 5px;
-  width: 85%;
-  background-color: rgb(236, 230, 222);
-  height: 800px;
-  overflow-y: hidden;
-}
-.el-footer {
-  height: 200px;
-}
-
-
 </style>

@@ -1,6 +1,6 @@
 
 import User_content from "@/components/Web_content/user_content/user_content.vue"
-import Web_Header from "@/page/Web_Header.vue"
+
 
 import Web_layout from "@/page/Web_layout.vue"
 import { createRouter, createWebHashHistory } from "vue-router"
@@ -57,6 +57,12 @@ const routes = [
         path: "/sign",
         component: () =>
             import('../page/sign_in.vue')
+
+    },
+    {
+        path: "/rest_psd",
+        component: () =>
+            import('../page/rest_psd.vue')
 
     },
 // NOT_FOUND页面

@@ -12,8 +12,8 @@
 .footer {
     background-color: #95a5a6;
   text-align: center;
-  height: 5vh;
-  width: 70%;
+  /* height: ; */
+  width: 100%;
   align-self: center;
 }
 </style>

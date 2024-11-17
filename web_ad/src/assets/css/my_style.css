@@ -2,18 +2,24 @@
    
   body {	
 	margin: 0;
-	/* padding: 15px; */
+	padding: 0;
 	 /* overflow-x: hidden; 防止水平滚动 */
 	background-color: white;
 	/* background-image: url('@/assets/img/top_img/left.jpg'); */
+	
   }
   
   @media screen and (min-width: 300px) {
 	html {
-	  /* width: calc(100vw - 2px); 减去2px是为了避免滚动条的影响 */
+	  /* width: calc(100vw - 5px); /*减去2px是为了避免滚动条的影响 */
 	  /* height: calc((100vw - 2px) * 1000px / 1000px); */
 	  background-color: white;
 	}
   }
    
+  :root {
+	--header-bg-color: #242f42;
+	--header-text-color: #fff;
+	--active-color: var(--el-color-primary);
+}
   

@@ -17,13 +17,13 @@
 
 <style scoped>
 img {
-    width: 70%;
+    width: 100%;
     height: 100px;
 
 }
 
 .content-img {
-    width: 800px;
+    width: 100%;
     margin: 0 auto;
     z-index: 1;
     

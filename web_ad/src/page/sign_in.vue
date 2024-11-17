@@ -81,9 +81,8 @@
           >
         </div>
         <p class="login-text">
-          已有账号，<el-link type="primary" @click="$router.push('/log')"
-            >立即登录</el-link
-          >
+          已有账号，
+          <RouterLink class="RouterLink" :to="{ path: '/log' }">立即登录</RouterLink>
         </p>
       </el-form>
     </div>
@@ -97,9 +96,9 @@ import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
 
 
 import request from "@/utils/request";
-// import router from "@/route";
+// import router from "@/route";+
 
-const router = useRouter(); 
+const router = useRouter();
 const sign = ref(true);
 
 const ruleFormRef = ref<FormInstance>();
@@ -221,7 +220,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       try {
         // 发送 POST 请求到后端
         const response = await request.post("users", {
-           user_info:postData,
+           userinfo:postData,
         });
 
         // 根据后端的响应处理结果
@@ -307,5 +306,26 @@ const resetForm = (formEl: FormInstance | undefined) => {
   margin-top: 20px;
   font-size: 14px;
   color: #787878;
+  text-decoration: none;
+}
+
+.RouterLink {
+  text-decoration: none;
+  color: #409eff;
+  font-weight: bold;
+}
+
+.RouterLink:hover {
+  color: #057ef8;
+  font-weight: bold; /* 鼠标悬停时链接的颜色 */
+  text-decoration: underline; /* 添加下划线 */
+}
+
+.RouterLink:active {
+  color: #055bb1; /* 点击链接时的颜色 */
+}
+
+.RouterLink:focus {
+  outline: 1px solid #076ad4; /* 获取焦点时的轮廓线 */
 }
 </style>

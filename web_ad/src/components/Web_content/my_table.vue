@@ -1,7 +1,6 @@
 <script setup>
 import { reactive, onMounted, ref, computed } from "vue";
-import { ElConfigProvider } from "element-plus";
-import zhCn from "element-plus/es/locale/lang/zh-cn";
+
 import requst from "../../utils/request";
 const userInfo = reactive({
   list: [],
@@ -124,7 +123,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-config-provider :locale="zhCn">
+ 
     <el-table :data="filteredAndFormattedTableData" style="width: 100%">
       <el-table-column prop="id" label="ID" />
       <el-table-column prop="username" label="用户名">
@@ -146,6 +145,7 @@ onMounted(() => {
         </template>
       </el-table-column>
     </el-table>
+   
     <div>
       <el-pagination
         v-model:current-page="paginationData.pageNum"
@@ -157,7 +157,7 @@ onMounted(() => {
         @current-change="handleCurrentChange"
       />
     </div>
-  </el-config-provider>
+  
 </template>
 
 <style scoped>

@@ -4,13 +4,12 @@ import axios from "axios";
 const userInfo = reactive({
   list: [],
 });
-const data = userInfo.list
+const data = userInfo.list;
 async function fetchUserInfo() {
   try {
     const res = await axios.get("http://localhost:3000/users");
 
     userInfo.list = res.data;
-    
   } catch (error) {
     console.error("Error fetching user info:", error);
     throw error;
@@ -19,24 +18,25 @@ async function fetchUserInfo() {
 
 onMounted(() => {
   fetchUserInfo();
-  
 });
 </script>
 
 <template>
-  <el-aside width="200px">
+  <el-aside>
     <el-container class="box">
       <div class="content-center">
-        <span class="ck">
-          <el-breadcrumb class="ck" separator="|">
-            <el-breadcrumb-item :to="{ path: '/' }">
-              查看：<span class="ck-red">{{ data.gold }}</span></el-breadcrumb-item
-            >
-            <el-breadcrumb-item :to="{ path: '/' }">
-              回复：<span class="hf-red">{{ data.gold }}</span></el-breadcrumb-item
-            >
-          </el-breadcrumb>
-        </span>
+        <div class="aside-header">
+          <div class="ck">
+            <el-breadcrumb class="ck" separator="|">
+              <el-breadcrumb-item :to="{ path: '/' }">
+                查看：<span class="ck-red">{{ data.gold }}</span></el-breadcrumb-item
+              >
+              <el-breadcrumb-item :to="{ path: '/' }">
+                回复：<span class="hf-red">{{ data.gold }}</span></el-breadcrumb-item
+              >
+            </el-breadcrumb>
+          </div>
+        </div>
         <div class="user-line"></div>
         <div class="id-container">
           <span class="id">{{ data.title }}</span>
@@ -68,32 +68,63 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.box {
-  display: flex;
-  flex-direction: column; /* 设置为列方向布局 */
-  align-items: center; /* 实现水平居中（在列布局中主要用于子项垂直对齐，但此处配合flex-direction: column使用，确保内容不紧贴边缘） */
-  height: 100vh; /* 设置容器高度为视口高度 */
-  width: 100%; /* 确保容器宽度充满父元素 */
-  padding: 10px; /* 可选：为内容添加内边距 */
-  box-sizing: border-box; /* 确保内边距和边框不会增加额外宽度 */
-  font-size: 20px;
+.el-aside {
+  width: 20%;
+  height: 500px;
+  overflow-y: hidden;
+  background-color: rgb(240, 234, 234);
+  .box {
+    display: flex;
+    flex-direction: column; /* 设置为列方向布局 */
+    align-items: center; /* 实现水平居中（在列布局中主要用于子项垂直对齐，但此处配合flex-direction: column使用，确保内容不紧贴边缘） */
+    height: 100%; /* 设置容器高度为视口高度 */
+    width: 100%; /* 确保容器宽度充满父元素 */
+    padding: 10px; /* 可选：为内容添加内边距 */
+    left: 0;
+    box-sizing: border-box; /* 确保内边距和边框不会增加额外宽度 */
+    font-size: 20px;
 
-  overflow-x: hidden;
-}
-
-.content-center {
-  display: flex;
-  flex-direction: column; /* 子容器也设置为列方向布局 */
-  align-items: center; /* 子容器内容水平居中（在列布局中主要用于垂直方向的对齐） */
-  width: 100%; /* 子容器宽度充满父容器 */
-  text-align: center; /* 确保文本内容水平居中 */
-  overflow-x: hidden;
-}
-
-img {
-  height: 100px;
-  width: 100px;
-  // margin-top: 20px; /* 调整图片上方间距 */
+    overflow-x: hidden;
+    .content-center {
+      display: flex;
+      flex-direction: column; /* 子容器也设置为列方向布局 */
+      align-items: center; /* 子容器内容水平居中（在列布局中主要用于垂直方向的对齐） */
+      width: 100%; /* 子容器宽度充满父容器 */
+      text-align: center; /* 确保文本内容水平居中 */
+      overflow-x: hidden;
+      .aside-header {
+        height: 40px;
+        display: flex;
+        flex-direction: column; /* 子容器也设置为列方向布局 */
+        align-items: center; /* 子容器内容水平居中（在列布局中主要用于垂直方向的对齐） */
+        width: 100%; /* 子容器宽度充满父容器 */
+        text-align: center; /* 确保文本内容水平居中 */
+        overflow-x: hidden;
+        .ck {
+          margin: 5px;
+          color: black;
+          font-size: 15px;
+          .ck-red {
+            color: red;
+          }
+          .hf-red {
+            color: red;
+          }
+        }
+      }
+      .user-line {
+        height: 2px;
+        width: 200px;
+        margin-bottom: 0;
+        background-color: rgb(165, 153, 153);
+      }
+    }
+    .img {
+      height: 100px;
+      width: 100px;
+      // margin-top: 20px; /* 调整图片上方间距 */
+    }
+  }
 }
 
 table {
@@ -122,25 +153,6 @@ table {
   }
 }
 
-.ck {
-  margin-bottom: 10px; /* 调整面包屑导航下方的间距 */
-  // background-color: aquamarine;
-  color: black;
-  font-size: 15px;
-  .ck-red {
-    color: red;
-  }
-  .hf-red {
-    color: red;
-  }
-}
-
-.user-line {
-  height: 2px;
-  width: 200px;
-  margin: 3px;
-  background-color: rgb(165, 153, 153);
-}
 .id-container {
   margin-top: 10px; /* 调整Id上方间距 */
 }
