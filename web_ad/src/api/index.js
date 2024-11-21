@@ -16,6 +16,13 @@ import request from '@/utils/request'
         });
         });
 
+        
+    export const posts=((data)=>{
+        return request.post('posts',{
+        data
+        });
+        });
+    
 
 // request.interceptors.request.use(onFulifiled:(config) => {
 // config.headers['token'] = 'xxx'

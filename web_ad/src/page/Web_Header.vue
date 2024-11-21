@@ -34,7 +34,7 @@
         <!-- 用户头像 -->
         <el-avatar class="user-avator" :size="30" src="../assets/img/logo.svg" />
         <!-- 用户名下拉菜单 -->
-        <el-dropdown class="user-name" trigger="click">
+        <el-dropdown class="user-name" trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
             1111
             <el-icon class="el-icon--right">
@@ -50,7 +50,7 @@
                 <el-dropdown-item>官方文档</el-dropdown-item>
               </a>
               <el-dropdown-item command="user">个人中心</el-dropdown-item>
-              <el-dropdown-item @click="handleCommand" >退出登录</el-dropdown-item>
+              <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -60,10 +60,12 @@
 </template>
 <script setup lang="ts">
 // import { onMounted } from "vue";
-// import { useSidebarStore } from '../store/sidebar';
-import { useRouter } from 'vue-router';
+import { useInfoStore, useTokenStore } from "@/stores//userInfo";
+import { useRouter } from "vue-router";
 // import imgurl from '../assets/img/img.jpg';
 
+const Info = useInfoStore();
+const token = useTokenStore();
 // const username: string | null = localStorage.getItem('vuems_name');
 // const message: number = 2;
 
@@ -81,11 +83,17 @@ import { useRouter } from 'vue-router';
 
 // // 用户名下拉菜单选择事件
 const router = useRouter();
-const handleCommand = () => {
-  
-      router.push('/log');
+//用户退出登录
+const handleCommand = (command) => {
+  if (command == "loginout") {
+    
+    router.push("/log");
+  } else if (command == "user") {
+    router.push("/user_center");
   }
-
+  token.saveToken();
+  Info.saveInfo();
+};
 
 // const setFullScreen = () => {
 //   if (document.fullscreenElement) {

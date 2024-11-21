@@ -4,61 +4,87 @@
       style="border-bottom: 1px solid #ccc"
       :editor="editorRef"
       :defaultConfig="toolbarConfig"
-      :mode="mode"
     />
     <Editor
       style="height: 500px; overflow-y: hidden"
       v-model="valueHtml"
       :defaultConfig="editorConfig"
-      :mode="mode"
       @onCreated="handleCreated"
     />
   </div>
 </template>
-<script>
-import "@wangeditor/editor/dist/css/style.css"; // 引入 css
 
-import { onBeforeUnmount, ref, shallowRef, onMounted } from "vue";
+<script setup>
+import "@wangeditor/editor/dist/css/style.css"; // 引入 css
+import { onBeforeUnmount, ref, shallowRef, onMounted, watch, watchEffect } from "vue";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 
-export default {
-  components: { Editor, Toolbar },
-  setup() {
-    // 编辑器实例，必须用 shallowRef
-    const editorRef = shallowRef();
+//声明属性
+//
+// 声明属性，Vue 会自动处理类型
+const props = defineProps({
+  modelValue: String,
+});
 
-    // 内容 HTML
-    const valueHtml = ref("<p>hello</p>");
+// 声明事件
+const emits = defineEmits(["update:modelValue"]);
+// const emits =defineEmits<{(e:"update:modelValue",value:string):void}>()
 
-    // 模拟 ajax 异步获取内容
-    onMounted(() => {
-      setTimeout(() => {
-        valueHtml.value = "<p>模拟 Ajax 异步设置内容</p>";
-      }, 1500);
-    });
+// 编辑器实例
+const editorRef = shallowRef(null);
 
-    const toolbarConfig = {};
-    const editorConfig = { placeholder: "请输入内容..." };
+// 内容 HTML
+const valueHtml = ref(props.modelValue || "<p>公益特色t</p>");
 
-    // 组件销毁时，也及时销毁编辑器
-    onBeforeUnmount(() => {
-      const editor = editorRef.value;
-      if (editor == null) return;
-      editor.destroy();
-    });
+// 监听 props.modelValue 的变化，并更新 valueHtml
+watchEffect(() => {
+  valueHtml.value = props.modelValue;
+});
 
-    const handleCreated = (editor) => {
-      editorRef.value = editor; // 记录 editor 实例，重要！
-    };
+// 当 valueHtml 变化时，触发 update:modelValue 事件
+watch(valueHtml, (newHtml) => {
+  emits("update:modelValue", newHtml);
+});
 
-    return {
-      editorRef,
-      valueHtml,
-      mode: "default", // 或 'simple'
-      toolbarConfig,
-      editorConfig,
-      handleCreated,
-    };
+// 模拟异步获取内容
+onMounted(() => {
+  setTimeout(() => {
+    valueHtml.value = "";
+  }, 1500);
+});
+
+// 工具栏配置
+const toolbarConfig = {};
+
+// 编辑器配置
+const editorConfig = {
+  placeholder: "请输入内容...",
+  MENU_CONF: {
+    uploadImage: {
+      server: "posts",
+      // 自定义插入图片
+      fieldName: "file",
+      customInsert(res, insertFn) {
+        // res 即服务端的返回结果
+        const url = res.data.url;
+        const alt = res.data.alt;
+        const href = res.data.href;
+        insertFn(url, alt, href);
+      },
+    },
   },
+};
+
+// 组件销毁时销毁编辑器实例
+onBeforeUnmount(() => {
+  const editor = editorRef.value;
+  if (editor) {
+    editor.destroy();
+  }
+});
+
+// 当编辑器创建时记录 editor 实例
+const handleCreated = (editor) => {
+  editorRef.value = editor;
 };
 </script>

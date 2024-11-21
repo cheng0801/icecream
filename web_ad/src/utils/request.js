@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getToken } from './auth'
 
 
 const instance = axios.create({
@@ -9,6 +10,8 @@ const instance = axios.create({
 //请求拦截
 instance.interceptors.request.use(config => {
     //头部携带token
+    // 
+    config.headers['token'] = getToken();
     return config;
 })
 

@@ -1,10 +1,15 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import Wang_Editer from "@/components/Wang_Editer.vue";
-const route = useRoute;
+import Post_msg from "./post_msg.vue";
+// import Wang_Editer from "@/components/Wang_Editer.vue";
+
+const route = useRoute();
 const id = route.params;
 console.log(id);
+const test = ref()
+
+
 </script>
 
 <template>
@@ -14,8 +19,10 @@ console.log(id);
         <span>{{}}test</span>
       </div>
       <div class="my-line"></div>
-      <div class="my-content">{{}}test1
-      <Wang_Editer/>
+      <div class="my-content">{{test}} 
+      <textarea v-model="test"></textarea>
+      test1
+       <Post_msg/>
       </div>
     </el-container>
   </el-main>

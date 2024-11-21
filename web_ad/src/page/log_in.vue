@@ -26,7 +26,7 @@
         </el-form-item>
         <el-form-item prop="pass">
           <el-input
-            v-model="ruleForm.pass"
+            v-model="ruleForm.password"
             type="password"
             autocomplete="on"
             placeholder="密码"
@@ -49,6 +49,7 @@
             type="primary"
             size="large"
             @click="submitForm(ruleFormRef)"
+            :loading="isLoading"
             >登录</el-button
           >
           <el-button class="login-btn" size="large" @click="resetForm(ruleFormRef)"
@@ -67,27 +68,29 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 import  { type ElAlert, type FormInstance, type FormRules, ElMessage} from "element-plus";
-import request from "@/utils/request";
 import { RouterLink, useRouter } from "vue-router";
 import { login } from "@/api";
 import { setToken } from "@/utils/auth";
 
+import {useTokenStore,useInfoStore} from '@/stores/userInfo'
+
+const tokenStore =useTokenStore()
+const userInfoStore=useInfoStore()
 const ruleFormRef = ref<FormInstance>();
 
 const router = useRouter();
 
 // const checked = ref(/*lgStr ? true : false*/);
 
-
-
+//设置登录状态，避免重复点击
+const isLoading =ref(false)
 
 const ruleForm = reactive({
   username: "username666",
-  pass: "pass666"
-
-
-
+  password: "pass666"
 });
+
+
 
 const rules = reactive<FormRules<typeof ruleForm>>({
   username: [
@@ -104,7 +107,7 @@ const rules = reactive<FormRules<typeof ruleForm>>({
       trigger: "blur",
     },
   ],
-  pass: [
+  password: [
     { required: true, message: "请输入密码", trigger: "blur" },
     {
       min: 6,
@@ -123,7 +126,7 @@ const rules = reactive<FormRules<typeof ruleForm>>({
 });
 
 const submitForm = async (formEl: FormInstance | undefined) => {
-
+isLoading.value=true
     if (!formEl) return;
     try {
       // 触发表单验证
@@ -136,20 +139,31 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
       const response = await login(postData);
       const {msg,token,status} = response.data;
+      // const userInfo = response.data
       console.log(msg)
-      console.log(token)
+      console.log(token.token)
+
       //缓存token
       //封装
       // 处理响应
           if ( response.data.status === 1) {
             // 登录成功，可以根据需要跳转到其他页面或显示成功消息
-            ElMessage.success('登录成功111')
-            setToken(token);
-            // 例如，使用 vue-router 跳转
+
+            //改变登录状态
+            isLoading.value=false
+
+          //c
+            userInfoStore.saveInfo(postData)
+            tokenStore.saveToken(token)
+
+            setToken(token.token);
+            // 使用 vue-router 跳转
             router.push({ name: "home" });
+            ElMessage.success('登录成功')
           } else {
+
             // 登录失败，显示错误信息
-            ElMessage.success("登录失败:222 " + response.data.message);
+            ElMessage.success("登录失败 " + response.data.message);
           }
         } else {
           // 验证失败，显示验证错误信息

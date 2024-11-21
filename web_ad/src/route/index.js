@@ -14,30 +14,7 @@ const routes = [
         path: '/',
         name: 'home',
         component: Web_layout,
-        // children: [
-        //     {
-        //         path: '/sign',
-        //         name: "sign",
-        //         // 箭头函数：懒加载 调用的时候加载
-        //         component: () => import('../components/Web_log/my_sign_in.vue'),
-
-        //     },
-        //     {
-        //         path: '/log',
-        //         name: "log",
-
-
-        //         component: () =>
-        //             import('../components/Web_log/my_log_in.vue')
-        //     },
-        //     // 设置一个默认路由（索引路由）
-        //     {
-        //         path: '', // 空字符串表示默认路由
-        //         name: 'homelog',
-        //         redirect: '/log', // 重定向到 /log 路由
-        //     },
-
-        // ]
+        
     },
     {
         path: '/user/:id',
@@ -49,12 +26,14 @@ const routes = [
 
     {
         path: "/log",
+        name: "log",
         component: () =>
             import('../page/log_in.vue')
 
     },
     {
         path: "/sign",
+        name: "sign",
         component: () =>
             import('../page/sign_in.vue')
 
@@ -65,7 +44,13 @@ const routes = [
             import('../page/rest_psd.vue')
 
     },
-// NOT_FOUND页面
+    {
+        path: "/user_center",
+        component: () =>
+            import('../page/user_center.vue')
+
+    },
+    // NOT_FOUND页面
     {
         path: "/:pathMatch(.*)*",
         component: () =>
@@ -73,59 +58,16 @@ const routes = [
 
     }
 ]
-// {
-//     path: '/',
-//     name: 'home',
-//     redirect: '/log' ,
-
-
-// },
-
-// {
-//     path: '/sign',
-//     name: "sign",
-
-//     component: my_sign_in,
-
-// },
-// {
-//     path: '/log',
-//     name: "log",
-//     // redirect: /log,
-//     component: My_log_in,
-
-//     // component: () =>
-//     //     import('../components/Web_log/my_log_in.vue')
-// }
-
-
-
-
-// {
-
-
-
-
-// redirect: '/log' ,
-
-//     // children:
-//     // {
-//     //     path: 'my_test',
-//     //     name: "test",
-//     //     component: () =>
-//     //         import('@/my_test.vue')
-//     // }
-// },
-
-// 登录 注册
-
-
-
 //路由器
 const router = createRouter({
     history: createWebHashHistory(),
     routes
 })
 
+//路由拦截
+// router.beforeEach(async(to,from,next)=>{
+//     //发送请求，获取数据
+//     const res = await 
+// })
 
 export default router
