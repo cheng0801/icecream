@@ -19,3 +19,9 @@ import request from '../utils/request'
 //     }
 
 // }
+
+
+//删除用户
+export const deluserInfo = (() => {
+    return request.del('user/1')
+});

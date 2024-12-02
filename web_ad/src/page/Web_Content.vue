@@ -8,15 +8,13 @@ import Web_content_Img from "./Web_content_Img.vue";
 <template>
   <div class="content">
     <Web_content_Img class="Main-img" />
+
     <Web_home />
-    <my_table  />   
+    <my_table />
   </div>
 </template>
 
 <style scoped>
-
-
-
 .content {
   z-index: 1;
   /* background-color: #ccb4ce; */

@@ -3,11 +3,24 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import Post_msg from "./post_msg.vue";
 // import Wang_Editer from "@/components/Wang_Editer.vue";
+import { getPosts } from "@/api";
+
 
 const route = useRoute();
 const id = route.params;
 console.log(id);
-const test = ref()
+const test = ref();
+
+  getPosts().then((res) =>{
+    const {data} = res
+    console.log(res);
+ console.log(data);
+  test.value=data.data
+ 
+   
+})
+
+
 
 
 </script>
@@ -16,13 +29,14 @@ const test = ref()
   <el-main>
     <el-container class="box">
       <div class="my-top">
-        <span>{{}}test</span>
+      
       </div>
       <div class="my-line"></div>
-      <div class="my-content">{{test}} 
-      <textarea v-model="test"></textarea>
-      test1
-       <Post_msg/>
+      <div class="my-content">
+        <span v-html="test"> </span>
+        
+       
+        <Post_msg />
       </div>
     </el-container>
   </el-main>

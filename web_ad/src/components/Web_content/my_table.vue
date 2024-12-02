@@ -24,7 +24,7 @@ const search = ref("");
 async function fetchUserInfo() {
   try {
     const res = await requst.get("users");
-
+console.log(res.data);
     userInfo.list = res.data /*|| res.data*/; // 假设后端返回的数据中有一个items字段，或者直接是数据数组
 
     tableData.total = res.data.total || userInfo.list.length; // 从后端获取total，或者如果后端不提供，则使用列表长度（但这通常不是正确的做法，因为列表可能只包含当前页的数据）
@@ -122,8 +122,7 @@ onMounted(() => {
 });
 </script>
 
-<template>
- 
+<template> 
     <el-table :data="filteredAndFormattedTableData" style="width: 100%">
       <el-table-column prop="id" label="ID" />
       <el-table-column prop="username" label="用户名">
@@ -144,8 +143,7 @@ onMounted(() => {
           <el-input v-model="search" size="small" placeholder="查找" />
         </template>
       </el-table-column>
-    </el-table>
-   
+    </el-table>   
     <div>
       <el-pagination
         v-model:current-page="paginationData.pageNum"

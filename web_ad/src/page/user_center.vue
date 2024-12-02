@@ -45,26 +45,12 @@
         :body-style="{ padding: '20px 50px', height: '100%', boxSizing: 'border-box' }"
       >
         <el-tabs tab-position="left">
-          <el-tab-pane name="label1" label="消息通知" class="user-tabpane">
-            <TabsComp />
-          </el-tab-pane>
-          <el-tab-pane name="label2" label="我的头像" class="user-tabpane">
-            <div class="crop-wrap">
-              <vueCropper
-                ref="cropper"
-                :autoCrop="true"
-                :centerBox="true"
-                :full="true"
-                mode="contain"
-              >
-              </vueCropper>
-            </div>
-            <el-button class="crop-demo-btn" type="primary"
-              >选择图片
-              <!-- <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage" /> -->
-            </el-button>
-            <!-- <el-button type="success" @click="saveAvatar">上传并保存</el-button> -->
-          </el-tab-pane>
+          <div>
+            <user_avatar />
+            <!-- <toux /> -->
+
+          </div>
+         
           <el-tab-pane name="label3" label="修改密码" class="user-tabpane">
             <!-- <el-form class="w500" label-position="top"> -->
             <el-form
@@ -103,14 +89,14 @@
 <script setup lang="ts" name="ucenter">
 import Web_Header from "./Web_Header.vue";
 import type { FormInstance, FormRules } from "element-plus";
-
+import user_avatar from "@/components/user_center/user_avatar.vue";
 import { useRouter } from "vue-router";
 import { reactive, ref } from "vue";
 import request from "@/utils/request";
-// import { VueCropper } from 'vue-cropper';
-// import 'vue-cropper/dist/index.css';
+import toux from "@/components/user_center/toux.vue";
+
 // import avatar from '@/assets/img/img.jpg';
-// import TabsComp from '../element/tabs.vue';
+
 
 // const name = localStorage.getItem("vuems_name");
 const router = useRouter();
@@ -222,6 +208,10 @@ const activeName = ref("label1");
 </script>
 
 <style scoped>
+.user-avatar-wrap {
+  height: 300px;
+  width:300px;
+}
 .box {
   height: 100%;
 }

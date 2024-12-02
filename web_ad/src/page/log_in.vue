@@ -197,6 +197,7 @@ isLoading.value=true
         // }
       // });
     } catch (error) {
+      isLoading.value=false
       // 处理请求错误
       ElMessage.error('登录失败，请检查输入！')
       console.error("登录时发生错误:", error);

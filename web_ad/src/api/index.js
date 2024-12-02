@@ -22,7 +22,43 @@ import request from '@/utils/request'
         data
         });
         });
-    
+
+        export const uploadFile=((data)=>{
+            return request.post('posts',{
+            data
+            });
+            });
+
+
+    export const fetchRoleData = ((data) => {
+        return request.get('list',{
+            data
+            });
+            });
+            
+            export const fetchUserData = ((data) => {
+                return request.get('user',{
+                    data
+                    });
+                    });
+                    export const fetchUserData11 = ((data) => {
+                        return request.get('user/2',{
+                            data
+                            });
+                            });
+
+            export const getPosts = ((data) => {
+                return request.get('posts/5e7e',{
+                    data
+                    });
+                    });
+
+                    export const delPosts = (() => {
+                        return request.del('user/2',{
+                            
+                            });
+                            });
+
 
 // request.interceptors.request.use(onFulifiled:(config) => {
 // config.headers['token'] = 'xxx'

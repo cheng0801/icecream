@@ -33,7 +33,7 @@ export function post(url, data) {
     return instance.post(url, data);
 }
 
-export function del(url,) {
+export function del(url) {
     return instance.delete(url);
 }
 

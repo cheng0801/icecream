@@ -31,7 +31,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 
 
+import VueCropper from 'vue-cropper';
 
-
-
+app.use(VueCropper)
 app.mount('#app')
