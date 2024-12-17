@@ -9,15 +9,15 @@
           <el-avatar class="user-avatar" :size="120" />
         </div>
         <div class="user-info">
-          <div class="info-name">111</div>
+          <div class="info-name">{{ Info }}</div>
           <div class="info-desc">
-            <span>@lin-xin</span>
+            <span>@cheng</span>
             <el-divider direction="vertical" />
-            <el-link href="https://lin-xin.gitee.io" target="_blank"
-              >lin-xin.gitee.io</el-link
+            <el-link href="https://github.com/cheng0801/icecream" target="_blank"
+              >icecream</el-link
             >
           </div>
-          <div class="info-desc">FE Developer</div>
+          <div class="info-desc">公益特色</div>
           <div class="info-icon">
             <a href="https://github.com/lin-xin" target="_blank">
               <i class="el-icon-lx-github-fill"></i
@@ -90,11 +90,16 @@
 import Web_Header from "./Web_Header.vue";
 import type { FormInstance, FormRules } from "element-plus";
 import user_avatar from "@/components/user_center/user_avatar.vue";
-import { useRouter } from "vue-router";
+
 import { reactive, ref } from "vue";
 import request from "@/utils/request";
-import toux from "@/components/user_center/toux.vue";
+import { useInfoStore } from "@/stores/userInfo";
 
+
+import { useRouter } from "vue-router";
+// import imgurl from '../assets/img/img.jpg';
+
+const Info = useInfoStore().userInfo.username;
 // import avatar from '@/assets/img/img.jpg';
 
 

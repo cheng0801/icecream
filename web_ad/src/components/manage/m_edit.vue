@@ -75,8 +75,10 @@ const saveEdit = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (!valid) return false; // 如果验证不通过，则不提交
+    console.log(form)
+
+    update(form.value); // 验证通过后，调用update回调更新数据
     ElMessage.success("修改成功");
-    update(); // 验证通过后，调用update回调更新数据
   });
 };
 
@@ -86,7 +88,7 @@ const handleAvatarSuccess: UploadProps["onSuccess"] = (response, uploadFile) => 
 };
 </script>
 
-<style>
+<style scoped>
 /* 样式部分，定义了上传控件的样式 */
 .avatar-uploader .el-upload {
   border: 1px dashed var(--el-border-color);

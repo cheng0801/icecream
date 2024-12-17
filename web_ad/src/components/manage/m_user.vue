@@ -8,7 +8,7 @@
         :total="total"
         :viewFunc="handleView"
         :delFunc="handleDelete"
-        :editFunc="handleEdit"
+        :editFunc="editUpdata"
         :refresh="refresh"
         @handleSizeChange="handleSizeChange"
         @handleCurrentChange="handleCurrentChange"
@@ -32,7 +32,7 @@
         :form-data="rowData"
         :options="options"
         :edit="isEdit"
-        :update="updateData"
+        :update="handleEdit"
       />
     </el-dialog>
     <el-dialog title="查看详情" v-model="visible1" width="700px" destroy-on-close>
@@ -105,7 +105,7 @@ const handleSearch = () => {
 // 表格相关
 let columns = ref([
   { type: "index", label: "序号", width: 55, align: "center" },
-  { prop: "name", label: "用户名" },
+  { prop: "username", label: "用户名" },
   { prop: "phone", label: "手机号" },
   { prop: "role", label: "角色" },
   { prop: "operator", label: "操作", width: 250 },
@@ -135,7 +135,7 @@ let options = ref<FormOption>({
   labelWidth: "100px",
   span: 12,
   list: [
-    { type: "input", label: "用户名", prop: "name", required: true },
+    { type: "input", label: "用户名", prop: "username", required: true },
     { type: "input", label: "手机号", prop: "phone", required: true },
     { type: "input", label: "密码", prop: "password", required: true },
     { type: "input", label: "邮箱", prop: "email", required: true },
@@ -146,7 +146,7 @@ const visible = ref(false);
 const isEdit = ref(false);
 const rowData = ref({
   list: [
-    { type: "input", label: "用户名", prop: "name", required: true },
+    { type: "input", label: "用户名", prop: "username", required: true },
     { type: "input", label: "手机号", prop: "phone", required: true },
     { type: "input", label: "密码", prop: "password", required: true },
     { type: "input", label: "邮箱", prop: "email", required: true },
@@ -154,13 +154,13 @@ const rowData = ref({
   ],
 });
 
-const editUpdata = (id, data) => {
-  if (data.value.id) {
-    put("user/" + id, data.value);
-  } else {
-    post("user/", data.value);
-  }
-  updateData();
+const editUpdata = (row) => {
+  rowData.value = { ...row };
+  isEdit.value = true;
+  visible.value = true;
+  
+  console.log('调用editU')
+ 
 };
 const updateData = () => {
   closeDialog();
@@ -186,7 +186,7 @@ const handleView = (row: User) => {
       label: "用户ID",
     },
     {
-      prop: "name",
+      prop: "username",
       label: "用户名",
     },
     {
@@ -237,24 +237,28 @@ const handleDelete = async (row: User) => {
 
 //编辑相关
 const handleEdit = (row: User) => {
+
   rowData.value = { ...row };
   console.log(rowData.value.id, row);
   const id = rowData.value.id;
     //上传修改
     if (rowData.value.id) {
+      console.log(11111111111)
       put("user/" + id, rowData.value);
     } else {
+      console.log(22222)
       post("user/", rowData.value);
     }
-  isEdit.value = true;
-  visible.value = true;
+    updateData();
+   visible.value = false; 
 };
 
-//生成随机角色
+// 生成随机角色
+
 function generateUserData(count) {
   const roles = ["管理员", "普通用户"];
-  const date = "2024-01-01";
-  const password = "123"; // 在实际应用中，密码应该是随机生成的
+  // const date = "2024-01-01";
+  // const password = "123"; // 在实际应用中，密码应该是随机生成的
 
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -272,17 +276,17 @@ function generateUserData(count) {
   for (let i = 0; i < count; i++) {
     tableData.value.push({
       id: `${i + 1}`, // 使用模板字符串来确保ID被双引号包围，并递增
-      name: getRandomString(2) + "某", // 生成一个随机的两个字符的姓名后缀，并加上“某”字作为名字
-      password: password,
+      username: getRandomString(7) , // 生成一个随机的两个字符的姓名后缀，并加上“某”字作为名字
+      password:  getRandomString(7),
       email: getRandomString(5) + "@qq.com", // 生成一个随机的邮箱前缀
       phone: "1" + getRandomInt(9999999999).toString().padStart(10, "0"), // 生成一个随机的11位手机号
-      date: date,
+      update_time: Date.now(),
       role: roles[getRandomInt(roles.length)], // 随机分配一个角色
     });
     post("user", tableData.value[i]);
   }
 
-  // return tableData.value;
+  return tableData.value;
 }
 
 //刷新
@@ -292,7 +296,8 @@ const refresh = () => {
 };
 
 // 使用函数生成5个用户数据
-// generateUserData(200);
+// generateUserData(666);
+
 onMounted(() => {
   updateData();
 });

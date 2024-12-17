@@ -11,7 +11,7 @@ import request from '@/utils/request'
 
     //test
     export const login=((data)=>{
-        return request.get('users/123',{
+        return request.get('user/1',{
         data
         });
         });

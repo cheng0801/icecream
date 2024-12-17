@@ -135,6 +135,13 @@ img {
     position: absolute
 }
 
+.image-remove-view1,
+.image-remove-view2,
+.image-remove-home1,
+.image-remove-home2 {
+    
+    line-height: 15px; /* 与高度相同以实现垂直居中 */
+}
 .right-container {
     margin-right: 0;
     right: 0;

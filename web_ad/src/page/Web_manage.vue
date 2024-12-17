@@ -6,11 +6,11 @@
       <v-tabs></v-tabs>
       <div class="content">     
         <router-view v-slot="{ Component }">
-          <transition name="move" mode="out-in">
+          <TransitionGroup name="move" mode="out-in">
             <keep-alive :include="tabs.nameList">
               <component :is="Component"></component>
             </keep-alive>
-          </transition>
+          </TransitionGroup>
         </router-view>
       </div>
     </div>
@@ -32,7 +32,7 @@ const sidebar = useSidebarStore();
 const tabs = useTabsStore();
 </script>
 
-<style>
+<style scoped>
 .wrapper {
   height: 100vh;
   overflow: hidden;

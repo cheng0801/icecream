@@ -4,14 +4,15 @@
     <div class="header-left">
       <img class="logo" src="../assets/img/logo.svg" alt="" />
       <div class="web-title">公益特色</div>
-      <!-- <div class="collapse-btn" >
-        <el-icon >
+      <div class="collapse-btn" @click="collapseChage" v-if="currentPath === '/manage'">
+        <el-icon v-if="sidebar.collapse">
           <Expand />
         </el-icon>
-        <el-icon >
+        <el-icon v-else>
           <Fold />
         </el-icon>
-      </div> -->
+      </div>
+
     </div>
     <div class="header-right">
       <div class="header-user-con">
@@ -26,9 +27,31 @@
           </el-tooltip>
           <span class="btn-bell-badge"></span>
         </div>
-        <div class="btn-icon">
-          <el-tooltip effect="dark" content="全屏" placement="bottom">
-            <i class="el-icon-lx-full"></i>
+        <!-- <RouterLink to="/">       -->
+          <div class="btn-icon" v-if="currentPath === '/user_center'">
+          <el-tooltip effect="dark" content="首页"  placement="bottom">
+            <i class="el-icon-lx-full"><el-icon :size="30">
+                <House @click=" router.push('/')" />
+              </el-icon></i>
+          </el-tooltip>
+        </div>       
+      <!-- </RouterLink> -->
+
+            
+          <div class="btn-icon" v-if="currentPath === '/manage'">
+          <el-tooltip effect="dark" content="首页"  placement="bottom">
+            <i class="el-icon-lx-full"><el-icon :size="30">
+                <House @click=" router.push('/')"/>
+              </el-icon></i>
+          </el-tooltip>
+        </div>       
+     
+     
+        <div class="btn-icon" v-if="currentPath === '/manage'">
+          <el-tooltip effect="dark" content="全屏" placement="bottom" >
+            <i class="el-icon-lx-full"><el-icon :size="30">
+                <FullScreen @click="setFullScreen"/>
+              </el-icon></i>
           </el-tooltip>
         </div>
         <!-- 用户头像 -->
@@ -36,19 +59,19 @@
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
-            1111
+            {{ Info.userInfo.username }}
             <el-icon class="el-icon--right">
               <arrow-down />
             </el-icon>
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
+              <el-dropdown-item v-if="Info.userInfo.role === '管理员'" command="manage">系统管理</el-dropdown-item>
+
+              <a href="https://github.com/cheng0801/icecream" target="_blank">
                 <el-dropdown-item>项目仓库</el-dropdown-item>
               </a>
-              <a href="https://lin-xin.gitee.io/example/vuems-doc/" target="_blank">
-                <el-dropdown-item>官方文档</el-dropdown-item>
-              </a>
+
               <el-dropdown-item command="user">个人中心</el-dropdown-item>
               <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
@@ -59,9 +82,10 @@
   </div>
 </template>
 <script setup lang="ts">
-// import { onMounted } from "vue";
-import { useInfoStore, useTokenStore } from "@/stores//userInfo";
-import { useRouter } from "vue-router";
+import { onMounted } from "vue";
+import { useSidebarStore } from "@/stores/m_sidebar";
+import { useInfoStore, useTokenStore, } from "@/stores//userInfo";
+import { useRouter, useRoute } from "vue-router";
 // import imgurl from '../assets/img/img.jpg';
 
 const Info = useInfoStore();
@@ -69,39 +93,46 @@ const token = useTokenStore();
 // const username: string | null = localStorage.getItem('vuems_name');
 // const message: number = 2;
 
-// const sidebar = useSidebarStore();
-// // 侧边栏折叠
-// const collapseChage = () => {
-//   sidebar.handleCollapse();
-// };
+const sidebar = useSidebarStore();
+// 侧边栏折叠
+const collapseChage = () => {
+  sidebar.handleCollapse();
+};
 
-// onMounted(() => {
-//   if (document.body.clientWidth < 1500) {
-//       collapseChage();
-//   }
-// });
+onMounted(() => {
+  if (document.body.clientWidth < 1500) {
+    collapseChage();
+  }
+});
 
 // // 用户名下拉菜单选择事件
 const router = useRouter();
+//获取当前路由
+const route = useRoute()
+const currentPath = route.path;
+
+console.log(currentPath)
 //用户退出登录
 const handleCommand = (command) => {
   if (command == "loginout") {
-    
+    token.saveToken();
+    Info.remove()
     router.push("/log");
   } else if (command == "user") {
     router.push("/user_center");
+  } else {
+    router.push("/manage")
   }
-  token.saveToken();
-  Info.saveInfo();
+
 };
 
-// const setFullScreen = () => {
-//   if (document.fullscreenElement) {
-//       document.exitFullscreen();
-//   } else {
-//       document.body.requestFullscreen.call(document.body);
-//   }
-// };
+const setFullScreen = () => {
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  } else {
+    document.body.requestFullscreen.call(document.body);
+  }
+};
 </script>
 <style lang="scss" scoped>
 .header {
@@ -205,6 +236,7 @@ const handleCommand = (command) => {
 .el-dropdown-menu__item {
   text-align: center;
 }
+
 a {
   text-decoration: none;
 }

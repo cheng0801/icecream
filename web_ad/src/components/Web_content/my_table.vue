@@ -1,4 +1,4 @@
-<script setup>
+ <script setup>
 import { reactive, onMounted, ref, computed } from "vue";
 
 import requst from "../../utils/request";
@@ -23,7 +23,7 @@ const search = ref("");
 //异步
 async function fetchUserInfo() {
   try {
-    const res = await requst.get("users");
+    const res = await requst.get("user");
 console.log(res.data);
     userInfo.list = res.data /*|| res.data*/; // 假设后端返回的数据中有一个items字段，或者直接是数据数组
 

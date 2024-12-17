@@ -29,14 +29,12 @@ import Web_side_Images from "./Web_side_Images.vue";
   // align-items: center;
   box-sizing: border-box;
   width: 70%;
-  height: 70px;
+  // height: 70px;
   .Web_Header {
       width: 70%;
     }
   }
 }
 
-/* .main-box {
 
-} */
 </style>

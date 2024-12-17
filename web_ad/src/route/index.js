@@ -4,7 +4,7 @@ import User_content from "@/components/Web_content/user_content/user_content.vue
 
 import Web_layout from "@/page/Web_layout.vue"
 import { createRouter, createWebHashHistory } from "vue-router"
-
+import { useInfoStore } from "@/stores/userInfo"
 
 
 //路由规则
@@ -87,39 +87,40 @@ const routes = [
             import('../page/NOT_FOUND.vue')
 
     },
+    // 无权限页面
     {
-        path: "/manage",
+        path: "/403",
         meta: {
             title: '用户管理',
             noAuth: true,
         },
         component: () =>
-            import('../page/Web_manage.vue'),
-        children: [
+            import('../page/403.vue')
 
+    },
+    {
+        path: "/manage",
+        meta: {
+            title: '用户管理',
+            requiresAdmin: true, // 修改为requiresAdmin并设置为true
+        },
+        component: () => import('../page/Web_manage.vue'),
+        children: [
             {
                 path: '/manage/system-user',
                 name: 'system-user',
-                // meta: {
-                //     title: '用户管理',
-                //     permiss: '11',
-                // },
                 meta: {
                     title: '系统首页',
-                    noAuth: true,
+                    requiresAdmin: true, // 同样设置为需要管理员权限
                 },
                 component: () => import('../components/Web_content/my_table.vue'),
             },
             {
                 path: '/manage/system-role',
                 name: 'system-role',
-                // meta: {
-                //     title: '角色管理',
-                //     permiss: '12',
-                // },
                 meta: {
-                    title: '用户管理',
-                    noAuth: true,
+                    title: '用户管理', // 注意：这里可能需要根据实际需求调整标题，以避免与父路由重复
+                    requiresAdmin: true, // 同样设置为需要管理员权限
                 },
                 component: () => import('../components/manage/m_user.vue'),
             },
@@ -133,9 +134,21 @@ const router = createRouter({
 })
 
 //路由拦截
-// router.beforeEach(async(to,from,next)=>{
-//     //发送请求，获取数据
-//     const res = await 
-// })
+router.beforeEach((to, form, next) => {
+    const manage = useInfoStore().userInfo.role;
+    if (to.matched.some(record => record.meta.requiresAdmin)) {
+        // 如果用户不是管理员，则重定向到403页面（或其他无权访问的页面）
+        if (manage !== "管理员") {
+            console.log('用户不是管理员，重定向到403页面');
+            next("/403"); // 处理权限不足的403页面
+        } else {
+            console.log('用户是管理员，允许访问');
+            next();
+        }
+    } else {
+        // 如果不需要管理员权限，则正常导航
+        next();
+    }
+})
 
 export default router

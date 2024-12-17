@@ -18,8 +18,10 @@ import Web_content_Img from "./Web_content_Img.vue";
 .content {
   z-index: 1;
   /* background-color: #ccb4ce; */
+  overflow-y: hidden;
   margin: 176px 0 0 0;
   width: 100%;
+  height: 100%;
   align-self: center;
 
   flex: 1;

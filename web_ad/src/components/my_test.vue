@@ -199,4 +199,4 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style src="@wangeditor/editor/dist/css/style.css"></style>
+<style src="@wangeditor/editor/dist/css/style.css" scoped></style>
