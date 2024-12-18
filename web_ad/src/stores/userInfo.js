@@ -11,13 +11,15 @@ export const useInfoStore = defineStore('userInfo', () => {
         "status": 1,
         "email": "",
         "phone": "",
-        "date": "",
+        "update_time": "",
         "token": {},
-        "role": ""
+        "role": "",
+        "avatar": ""
+
     })
     function saveInfo(data) {
 
-        userInfo.id = data.id ? data.id : ''
+        userInfo.id = data.id
         userInfo.username = data.username
         userInfo.token = data.token
         userInfo.password = data.password
@@ -25,9 +27,9 @@ export const useInfoStore = defineStore('userInfo', () => {
         userInfo.status = data.status
         userInfo.email = data.email
         userInfo.phone = data.phone
-        userInfo.date = data.date
+        userInfo.update_time = data.update_time
         userInfo.role = data.role
-
+        userInfo.avatar = data.avatar
     }
 
 

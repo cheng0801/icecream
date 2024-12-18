@@ -55,7 +55,7 @@
           </el-tooltip>
         </div>
         <!-- 用户头像 -->
-        <el-avatar class="user-avator" :size="30" src="../assets/img/logo.svg" />
+        <el-avatar class="user-avator" :size="30" :src="imgurl" />
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
@@ -89,7 +89,11 @@ import { useRouter, useRoute } from "vue-router";
 // import imgurl from '../assets/img/img.jpg';
 
 const Info = useInfoStore();
+const imgurl=Info.userInfo.avatar
+
 const token = useTokenStore();
+
+
 // const username: string | null = localStorage.getItem('vuems_name');
 // const message: number = 2;
 

@@ -1,157 +1,264 @@
 <template>
-  <el-tab-pane name="label2" label="我的头像" class="user-tabpane">
-    <div class="crop-wrap">
-      <VueCropper
-        ref="cropperRef"
-        :img="imgSrc"
-        :autoCrop="true"
-        :centerBox="true"
-        :full="true"
-        :info="true"
-        :canMove="true"
-        :canResize="true"
-        :outputSize="1"
-        :outputType="'jpeg'"
-        mode="contain"
-      />
-      <img
-        v-if="cropImg"
-        :src="cropImg"
-        class="crop-result"
-        alt="Cropped Image Preview"
-      />
-    </div>
-    <el-button class="crop-demo-btn" type="primary">
-      选择图片
-      <input
-        class="crop-input"
-        type="file"
-        name="image"
-        accept="image/*"
-        @change="setImage"
-      />
-    </el-button>
-    <el-button type="success" @click="cropAndSaveAvatar">上传并保存</el-button>
-  </el-tab-pane>
+  <div class="user-info-head" @click="editCropper()">
+    <el-image
+      :src="options.img"
+      title="点击上传头像"
+      class="img-circle img-lg"
+    />
+    <el-dialog v-model="dialogVisible" title="图片裁剪" width="50%">
+      <el-row>
+        <el-col :xs="24" :md="13" :style="{ height: '350px' }">
+          <VueCropper
+            ref="cropperRef"
+            :img="options.img"
+            :info="true"
+            :infoTrue="options.infoTrue"
+            :auto-crop="options.autoCrop"
+            :fixed-box="options.fixedBox"
+            :fixedNumber="options.fixedNumber"
+            :fixed="options.fixed"
+            :centerBox="options.centerBox"
+            @realTime="realTime"
+          >
+          </VueCropper>
+        </el-col>
+        <el-col :xs="24" :md="11" :style="{ height: '350px' }">
+          <div class="avatar-upload-preview">
+            <img :src="previews.url" :style="previews.img" />
+          </div>
+        </el-col>
+      </el-row>
+      <el-row class="ptb2">
+        <el-col :lg="2" :md="2">
+          <el-upload
+            action="#"
+            :http-request="requestUpload"
+            :show-file-list="false"
+            :before-upload="beforeUpload"
+          >
+            <el-button>
+              选择
+              <el-icon class="el-icon--right"><Upload /></el-icon>
+            </el-button>
+          </el-upload>
+        </el-col>
+        <el-col :lg="{ span: 1, offset: 1 }" :md="2">
+          <el-button icon="Plus" @click="changeScale(1)"></el-button>
+        </el-col>
+        <el-col :lg="{ span: 1, offset: 1 }" :md="2">
+          <el-button icon="Minus" @click="changeScale(-1)"></el-button>
+        </el-col>
+        <el-col :lg="{ span: 1, offset: 1 }" :md="2">
+          <el-button
+            icon="RefreshLeft"
+            @click="rotateClick('left')"
+          ></el-button>
+        </el-col>
+        <el-col :lg="{ span: 1, offset: 1 }" :md="2">
+          <el-button
+            icon="RefreshRight"
+            @click="rotateClick('right')"
+          ></el-button>
+        </el-col>
+        <el-col :lg="{ span: 1, offset: 1 }" :md="2">
+          <el-button @click="refreshCrop()">重 置</el-button>
+        </el-col>
+        <el-col :lg="{ span: 1, offset: 7 }" :md="2">
+          <el-button type="primary" @click="uploadImg()">提 交</el-button>
+        </el-col>
+      </el-row>
+    </el-dialog>
+  </div>
 </template>
-
-<script setup>
+<script lang="ts" setup>
+import { reactive, ref, toRefs, onMounted } from "vue";
 import { VueCropper } from "vue-cropper";
 import "vue-cropper/dist/index.css";
-import { ref, onMounted } from "vue";
-
-// const imgSrc = ref();
-// const cropImg = ref("");
-// const cropperRef = ref(null);
-
-// const setImage = (e) => {
-//   const target = e.target
-//   const file = target.files?.[0];
-//   if (!file || !file.type.startsWith("image/")) {
-//     return;
-//   }
-//   const reader = new FileReader();
-//   reader.onload = (event) => {
-//     imgSrc.value = event.target.result
-//     if (cropperRef.value) {
-//       cropperRef.value = event.target.result // 更新 VueCropper 图片（注意：这可能不是官方推荐的方法，但通常有效）
-//       console.log(cropperRef.value)
-//       cropImg.value = cropperRef.value.toDataURL();
-//       console.log(cropImg.value)
-//     }
-//   };
-//   reader.readAsDataURL(file);
-// };
-
-// const cropAndSaveAvatar = () => {
-//   if (cropperRef.value) {
-//     try {
-//       console.log(cropperRef.value)
-//       cropImg.value = cropperRef.value.getCroppedCanvas().toDataURL();
-
-//       // 这里可以处理裁剪后的图片数据URL，比如上传到服务器
-//        // 这里可以添加保存裁剪后图片的逻辑，比如上传到服务器
-//     console.log("Cropped Image Data URL:", cropImg.value);
-//     // 假设保存成功，可以重置 imgSrc 以展示原始图片或清空裁剪区域
-//     // imgSrc.value = avatar; // 如果需要重置为原始图片
-//     // 或者，如果您想保留裁剪后的图片作为预览
-//     // 可以不做任何重置操作，因为 cropImg 已经保存了裁剪后的图片
-//     } catch (error) {
-//       console.error("裁剪图片时出错:", error);
-//       // 显示错误消息给用户
-//     }
-//   } else {
-//     console.warn("VueCropper 实例未初始化或已销毁");
-//     // 显示警告消息给用户
-//   }
-// };
-const imgSrc = ref();
-const cropImg = ref("");
-const cropperRef = ref(null);
-
-const setImage = (e) => {
-  const target = e.target;
-  const file = target.files?.[0];
-  if (!file || !file.type.startsWith("image/")) {
-    return;
+// import utils from "@/utils/utils";
+// 父级传过来的图片 interface
+interface Props {
+  avatar: string;
+}
+// 父级传过来的图片
+const props = withDefaults(defineProps<Props>(), {
+  avatar: "",
+});
+// 转化
+let { avatar } = toRefs(props);
+// 裁剪相关配置类型 interface
+interface Options {
+  img: string | ArrayBuffer | null; // 裁剪图片的地址
+  info: true; // 裁剪框的大小信息
+  outputSize: number; // 裁剪生成图片的质量 [1至0.1]
+  outputType: "jpeg"; // 裁剪生成图片的格式
+  canScale: boolean; // 图片是否允许滚轮缩放
+  autoCrop: boolean; // 是否默认生成截图框
+  autoCropWidth: number; // 默认生成截图框宽度
+  autoCropHeight: number; // 默认生成截图框高度
+  fixedBox: boolean; // 固定截图框大小 不允许改变
+  fixed: boolean; // 是否开启截图框宽高固定比例
+  fixedNumber: Array<number>; // 截图框的宽高比例  需要配合centerBox一起使用才能生效
+  full: boolean; // 是否输出原图比例的截图
+  canMoveBox: boolean; // 截图框能否拖动
+  original: boolean; // 上传图片按照原始比例渲染
+  centerBox: boolean; // 截图框是否被限制在图片里面
+  infoTrue: boolean; // true 为展示真实输出图片宽高 false 展示看到的截图框宽高
+}
+// 裁剪相关配置src\assets\img\header.jpg
+const options: Options = reactive({
+  img: "", // 需要剪裁的图片
+  autoCrop: true, // 是否默认生成截图框
+  autoCropWidth: 150, // 默认生成截图框的宽度
+  autoCropHeight: 150, // 默认生成截图框的长度
+  fixedBox: true, // 是否固定截图框的大小 不允许改变
+  info: true, // 裁剪框的大小信息
+  outputSize: 0.5, // 裁剪生成图片的质量 [1至0.1]
+  outputType: "jpeg", // 裁剪生成图片的格式
+  canScale: true, // 图片是否允许滚轮缩放
+  fixed: false, // 是否开启截图框宽高固定比例
+  fixedNumber: [1, 1], // 截图框的宽高比例 需要配合centerBox一起使用才能生效
+  full: true, // 是否输出原图比例的截图
+  canMoveBox: true, // 截图框能否拖动
+  original: false, // 上传图片按照原始比例渲染
+  centerBox: true, // 截图框是否被限制在图片里面
+  infoTrue: true, // true 为展示真实输出图片宽高 false 展示看到的截图框宽高
+});
+// 裁剪之后的数据
+const previews: any = ref({});
+// 获取图片裁剪实例
+const cropperRef: any = ref({});
+// 弹窗状态
+const dialogVisible = ref(false);
+// 旋转图片
+let rotateClick = (type: string) => {
+  if (type == "left") {
+    cropperRef.value.rotateLeft();
   }
+  if (type == "right") {
+    cropperRef.value.rotateRight();
+  }
+};
+// 放大缩小图片比例
+let changeScale = (num: number) => {
+  const scale = num || 1;
+  cropperRef.value.changeScale(scale);
+};
+// 重置图片
+let refreshCrop = () => {
+  cropperRef.value.refresh();
+};
+// 裁剪之后的数据
+const realTime = (data: any) => {
+  previews.value = data;
+};
+// 覆盖默认上传行为
+let requestUpload = () => {};
+// 上传预处理
+let beforeUpload = (file: any) => {
+  // 判断图片类型
+  let img = [
+    "image/png",
+    "image/jpg",
+    "image/jpeg",
+    "image/PNG",
+    "image/JPG",
+    "image/JPEG",
+  ];
+  if (!img.includes(file.type)) {
+    // utils._message(`图片格式有误，请重新上传`, "error");
+    return false;
+  }
+  // 处理预上传的图片及格式
   const reader = new FileReader();
-  reader.onload = (event) => {
-    imgSrc.value = event.target.result; // 更新图像 URL
-    // 不需要更新 cropperRef.value，VueCropper 会自动通过 img 属性更新
-  };
   reader.readAsDataURL(file);
+  reader.onload = () => {
+    options.img = reader.result;
+  };
 };
-
-const cropAndSaveAvatar = () => {
-  if (cropperRef.value) {
-    try {
-      console.log(cropperRef.value);
-      // 获取裁剪后的图像 Data URL
-      cropImg.value = cropperRef.getCroppedCanvas().toDataURL();
-      console.log("Cropped Image Data URL:", cropImg.value);
-
-      // 这里可以处理裁剪后的图片数据URL，比如上传到服务器
-    } catch (error) {
-      console.error("裁剪图片时出错:", error);
-      // 显示错误消息给用户
-    }
-  } else {
-    console.warn("VueCropper 实例未初始化或已销毁");
-    // 显示警告消息给用户
-  }
+// 编辑头像
+function editCropper() {
+  dialogVisible.value = true;
+}
+// 提交
+import{useInfoStore} from '@/stores/userInfo'
+import { post,get,put } from "@/utils/request";
+let uploadImg = () => {
+  // console.log(cropperRef.value.imgs);
+  // const avatar=cropperRef.value.imgs
+  
+  // useInfoStore().saveInfo(avatar.value)
+  cropperRef.value.getCropData((data: any) => {
+    console.log(data);
+    
+    useInfoStore().userInfo.avatar=data
+  
+  put('user/0801', useInfoStore().userInfo)
+    let formData = dataURLtoFile(data,'fileName.jpg')
+    // 添加上传接口及相关操作
+    console.log(formData);
+    dialogVisible.value = false;
+  });
 };
+// base64转图片文件
+const dataURLtoFile = (dataUrl, filename) => {
+	const arr = dataUrl.split(',')
+	const mime = arr[0].match(/:(.*?);/)[1]
+	const bstr = atob(arr[1])
+	let len = bstr.length
+	const u8arr = new Uint8Array(len)
+	while (len--) {
+		u8arr[len] = bstr.charCodeAt(len)
+	}
+	return new File([u8arr], filename, { type: mime })
+}
+onMounted(() => {
+  setTimeout(() => {
+    options.img = avatar.value;
+  }, 100);
+});
 </script>
 
-<style scoped>
-.user-tabpane {
-  padding: 10px 20px;
+<style scoped lang="less">
+.avatar-upload-preview {
+  position: absolute;
+  top: 50%;
+  transform: translate(50%, -50%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  box-shadow: 0 0 4px #ccc;
+  overflow: hidden;
 }
-
-.crop-wrap {
-  width: 500px;
-  height: 350px;
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.crop-result {
-  max-width: 100%;
-  margin-top: 10px;
-}
-
-.crop-demo-btn {
+.user-info-head {
   position: relative;
   display: inline-block;
+  height: 120px;
 }
 
-.crop-input {
+.user-info-head:hover:after {
+  content: "+";
   position: absolute;
-  width: 100%;
-  height: 100%;
   left: 0;
+  right: 0;
   top: 0;
-  opacity: 0;
+  bottom: 0;
+  color: #eee;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 24px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  cursor: pointer;
+  line-height: 110px;
+  border-radius: 50%;
+}
+.img-circle {
+  border-radius: 50%;
+}
+
+.img-lg {
+  width: 120px;
+  height: 120px;
   cursor: pointer;
 }
 </style>

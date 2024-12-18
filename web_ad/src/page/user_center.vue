@@ -6,10 +6,11 @@
       <el-card class="user-profile" shadow="hover" :body-style="{ padding: '0px' }">
         <div class="user-profile-bg"></div>
         <div class="user-avatar-wrap">
-          <el-avatar class="user-avatar" :size="120" />
+          <!-- <el-avatar class="user-avatar" :size="120" /> -->
+          <UserAvatar :avatar="Info.avatar" />
         </div>
         <div class="user-info">
-          <div class="info-name">{{ Info }}</div>
+          <div class="info-name">{{ Info.username }}</div>
           <div class="info-desc">
             <span>@cheng</span>
             <el-divider direction="vertical" />
@@ -46,9 +47,9 @@
       >
         <el-tabs tab-position="left">
           <div>
-            <user_avatar />
+            <!-- <user_avatar /> -->
             <!-- <toux /> -->
-
+            
           </div>
          
           <el-tab-pane name="label3" label="修改密码" class="user-tabpane">
@@ -89,7 +90,7 @@
 <script setup lang="ts" name="ucenter">
 import Web_Header from "./Web_Header.vue";
 import type { FormInstance, FormRules } from "element-plus";
-import user_avatar from "@/components/user_center/user_avatar.vue";
+// import user_avatar from "@/components/user_center/user_avatar.vue";
 
 import { reactive, ref } from "vue";
 import request from "@/utils/request";
@@ -97,10 +98,15 @@ import { useInfoStore } from "@/stores/userInfo";
 
 
 import { useRouter } from "vue-router";
+
+
+import UserAvatar from "@/components/user_center/user_avatar.vue";
+// https://img2.baidu.com/it/u=2563189020,3546676907&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1432
+
 // import imgurl from '../assets/img/img.jpg';
 
-const Info = useInfoStore().userInfo.username;
-// import avatar from '@/assets/img/img.jpg';
+const Info = useInfoStore().userInfo;
+
 
 
 // const name = localStorage.getItem("vuems_name");

@@ -72,7 +72,7 @@ const isLoading = ref(false)
 
 const ruleForm = reactive({
   username: defParam ? defParam.username : '',
-    password: defParam ? defParam.password : '',
+  password: defParam ? defParam.password : '',
 });
 
 
@@ -143,10 +143,10 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           router.push({ name: "home" });
           //记住密码后保存
           if (checked.value) {
-                localStorage.setItem('login-param', JSON.stringify(postData));
-            } else {
-                localStorage.removeItem('login-param');
-            }
+            localStorage.setItem('login-param', JSON.stringify(postData));
+          } else {
+            localStorage.removeItem('login-param');
+          }
           ElMessage.success('登录成功')
         } else {
           //改变登录状态
