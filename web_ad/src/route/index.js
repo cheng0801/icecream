@@ -1,7 +1,7 @@
 
 import User_content from "@/components/Web_content/user_content/user_content.vue"
 
-
+import mani from '@/components/Web_content/user_content/el_main.vue'
 import Web_layout from "@/page/Web_layout.vue"
 import { createRouter, createWebHashHistory } from "vue-router"
 import { useInfoStore } from "@/stores/userInfo"
@@ -20,6 +20,20 @@ const routes = [
         path: '/user/:id',
         name: 'userhome',
         component: User_content,
+        children: [
+            // {
+            //     path: '/user/:id',
+            //     name: 'system-11',
+               
+            //     component: mani,
+            // },
+            {
+                path: '/user/:id',
+                name: 'system3333',
+               
+                component: import('@/components/Web_content/user_content/post_msg.vue'),
+            },
+        ]
 
 
     },

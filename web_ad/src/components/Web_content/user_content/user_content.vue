@@ -9,6 +9,7 @@ import El_main from "./el_main.vue";
 </script>
 
 <template>
+  
   <el-container class="box">
     <user_side_Images />
     <el-container class="main-box">
@@ -19,7 +20,9 @@ import El_main from "./el_main.vue";
         <El_header />
         <el-container>
           <El_aside />
-          <El_main />
+          <RouterView></RouterView>
+          
+          <!-- <El_main /> -->
         </el-container>
         <El_footer />
       </el-container>

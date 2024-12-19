@@ -6,9 +6,7 @@ import pinia from './stores'
 
 const app = createApp(App)
 
-app.use(router)
 
-app.use(pinia)
 
 
 
@@ -32,6 +30,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 
 
 import VueCropper from 'vue-cropper';
-
+app.use(router)
+app.use(pinia)
 app.use(VueCropper)
 app.mount('#app')

@@ -6,7 +6,6 @@
       <el-card class="user-profile" shadow="hover" :body-style="{ padding: '0px' }">
         <div class="user-profile-bg"></div>
         <div class="user-avatar-wrap">
-          <!-- <el-avatar class="user-avatar" :size="120" /> -->
           <UserAvatar :avatar="Info.avatar" />
         </div>
         <div class="user-info">
@@ -14,15 +13,12 @@
           <div class="info-desc">
             <span>@cheng</span>
             <el-divider direction="vertical" />
-            <el-link href="https://github.com/cheng0801/icecream" target="_blank"
-              >icecream</el-link
-            >
+            <el-link href="https://github.com/cheng0801/icecream" target="_blank">icecream</el-link>
           </div>
           <div class="info-desc">公益特色</div>
           <div class="info-icon">
             <a href="https://github.com/lin-xin" target="_blank">
-              <i class="el-icon-lx-github-fill"></i
-            ></a>
+              <i class="el-icon-lx-github-fill"></i></a>
             <i class="el-icon-lx-qq-fill"></i>
             <i class="el-icon-lx-facebook-fill"></i>
             <i class="el-icon-lx-twitter-fill"></i>
@@ -40,39 +36,53 @@
           </div>
         </div>
       </el-card>
-      <el-card
-        class="user-content"
-        shadow="hover"
-        :body-style="{ padding: '20px 50px', height: '100%', boxSizing: 'border-box' }"
-      >
-        <el-tabs tab-position="left">
-          <div>
-            <!-- <user_avatar /> -->
-            <!-- <toux /> -->
-            
-          </div>
-         
-          <el-tab-pane name="label3" label="修改密码" class="user-tabpane">
-            <!-- <el-form class="w500" label-position="top"> -->
-            <el-form
-              ref="ruleFormRef"
-              style="max-width: 600px"
-              :model="ruleForm"
-              status-icon
-              :rules="rules"
-              label-position="top"
-              label-width="auto"
-              class="w500"
-              size="large"
-            >
+      <el-card class="user-content" shadow="hover"
+        :body-style="{ padding: '20px 50px', height: '100%', boxSizing: 'border-box' }">
+        <el-tabs tab-position="left" v-model='activeName' >
+          <el-tab-pane name="label1" label="个人信息"  class="user-tabpane">
+           <div v-if="activeName==='label1'">111</div>
+          </el-tab-pane>
+          <el-tab-pane name="label2" label="修改密码" class="user-tabpane">
+           
+            <el-form v-if="activeName==='label2'" ref="ruleFormRef" style="max-width: 600px" :model="ruleForm" status-icon :rules="rules"
+              label-position="top" label-width="auto" class="w500" size="large" >
               <el-form-item label="旧密码：">
-                <el-input type="password" v-model="ruleForm.old"></el-input>
-              </el-form-item>
+              <el-input :type="flagType.flagType === 'password' ? 'password' : 'text'" v-model="ruleForm.old"
+                @focus="handleFocusOldPassword">
+                <!-- 添加一个图标用于切换密码可见性 -->
+                <template #suffix>
+                  <el-icon :class="[flagType.flagType === 'password' ? 'el-icon-eye-off' : 'el-icon-eye']"
+                    style="cursor: pointer" @click="toggleOldPasswordVisibility">
+                    <el-icon v-if="flagType.flagType === 'password'"><View /></el-icon>
+                    <el-icon v-else><Hide /></el-icon>
+                  </el-icon>
+                </template>
+              </el-input>
+            </el-form-item>
+             
               <el-form-item label="新密码：">
-                <el-input type="password" v-model="ruleForm.password"></el-input>
+                <el-input :type=flagType.flagType v-model="ruleForm.password">
+                  
+                  <template #suffix>
+                  <el-icon :class="[flagType.flagType === 'password' ? 'el-icon-eye-off' : 'el-icon-eye']"
+                    style="cursor: pointer" @click="toggleOldPasswordVisibility">
+                    <el-icon v-if="flagType.flagType === 'password'"><View /></el-icon>
+                    <el-icon v-else><Hide /></el-icon>
+                  </el-icon>
+                </template>
+                </el-input>
               </el-form-item>
               <el-form-item label="确认新密码：">
-                <el-input type="password" v-model="ruleForm.checkPass"></el-input>
+                <el-input :type=flagType.flagType v-model="ruleForm.checkPass">
+                  
+                  <template #suffix>
+                  <el-icon :class="[flagType.flagType === 'password' ? 'el-icon-eye-off' : 'el-icon-eye']"
+                    style="cursor: pointer" @click="toggleOldPasswordVisibility">
+                    <el-icon v-if="flagType.flagType === 'password'"><View /></el-icon>
+                    <el-icon v-else><Hide /></el-icon>
+                  </el-icon>
+                </template>
+                </el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="submitForm(ruleFormRef)">
@@ -104,6 +114,32 @@ import UserAvatar from "@/components/user_center/user_avatar.vue";
 // https://img2.baidu.com/it/u=2563189020,3546676907&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1432
 
 // import imgurl from '../assets/img/img.jpg';
+const activeName = ref('lable1')
+
+const flagType = ref({ flagType: 'password' });
+const showPassword = ref(false);
+
+// 切换旧密码可见性的函数
+const toggleOldPasswordVisibility = () => {
+  flagType.value.flagType = flagType.value.flagType === 'password' ? 'text' : 'password';
+};
+
+// 切换新密码可见性的函数
+const toggleNewPasswordVisibility = () => {
+  showPassword.value = !showPassword.value;
+};
+
+// 处理旧密码输入框聚焦事件的函数
+const handleFocusOldPassword = () => {
+  // ... 处理旧密码输入框聚焦时的逻辑
+};
+
+// 处理新密码输入框聚焦事件的函数
+const handleFocusNewPassword = () => {
+  // ... 处理新密码输入框聚焦时的逻辑
+};
+
+
 
 const Info = useInfoStore().userInfo;
 
@@ -176,7 +212,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         //   password: ruleForm.password,
         // };
         const { password } = ruleForm;
-        const response = await request.patch("users/123", { password });
+        const response = await request.patch("user/0801", { password });
         isLoading.value = false;
         ElMessage.success("修改成功，请重新登陆！");
         router.push({ name: "log" });
@@ -184,48 +220,26 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     });
   } catch (error) {
     // 处理请求错误
-    ElMessage.error("登录失败，请检查输入！");
-    console.error("登录时发生错误:", error);
+    ElMessage.error("修改密码失败，请检查输入！");
+    console.error("修改密码时发生错误:", error);
   }
 };
 
-const activeName = ref("label1");
 
-// const avatarImg = ref(avatar);
-// const imgSrc = ref(avatar);
-// const cropImg = ref('');
-// const cropper: any = ref();
 
-// const setImage = (e: any) => {
-//     const file = e.target.files[0];
-//     if (!file.type.includes('image/')) {
-//         return;
-//     }
-//     const reader = new FileReader();
-//     reader.onload = (event: any) => {
-//         imgSrc.value = event.target.result;
-//         cropper.value && cropper.value.replace(event.target.result);
-//     };
-//     reader.readAsDataURL(file);
-// };
 
-// const cropImage = () => {
-//     cropImg.value = cropper.value?.getCroppedCanvas().toDataURL();
-// };
-
-// const saveAvatar = () => {
-//     avatarImg.value = cropImg.value;
-// };
 </script>
 
 <style scoped>
 .user-avatar-wrap {
   height: 300px;
-  width:300px;
+  width: 300px;
 }
+
 .box {
   height: 100%;
 }
+
 .user-container {
   position: absolute;
   top: 70px;
@@ -345,7 +359,7 @@ const activeName = ref("label1");
   text-align: center;
 }
 
-.user-footer > div + div {
+.user-footer>div+div {
   border-left: 1px solid rgba(83, 70, 134, 0.1);
 }
 </style>
