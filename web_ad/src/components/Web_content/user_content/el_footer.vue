@@ -1,9 +1,14 @@
 <script setup>
+function getLocalTime(n) {   
+	return new Date(parseInt(n)).toLocaleString().replace(/:\d{1,2}$/,' ');   
+}
+
+
 
 </script>
 
 <template>
- <el-footer>Footer</el-footer>
+ <el-footer>{{getLocalTime(1668009599000)}}</el-footer>
 </template>
 
 <style scoped>

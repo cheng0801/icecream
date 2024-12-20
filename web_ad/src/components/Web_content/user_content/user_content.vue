@@ -46,7 +46,7 @@ import El_main from "./el_main.vue";
   flex-direction: column; // 明确指定为列方向布局
   padding: 0;
   justify-content: center; // 水平居中
-  background-color: red;
+  background-color: rgb(197, 189, 189);
   width: 78%;
 }
 

@@ -17,14 +17,14 @@ import request from '@/utils/request'
         });
 
         
-    export const posts=((data)=>{
-        return request.post('posts',{
-        data
+    export const posts=((id,content)=>{
+        return request.patch('posts/'+id,{
+      content
         });
         });
 
         export const uploadFile=((data)=>{
-            return request.post('posts',{
+            return request.put('posts/1219',{
             data
             });
             });
@@ -48,7 +48,7 @@ import request from '@/utils/request'
                             });
 
             export const getPosts = ((data) => {
-                return request.get('posts/5e7e',{
+                return request.get('posts/12191',{
                     data
                     });
                     });

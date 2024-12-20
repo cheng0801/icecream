@@ -13,7 +13,7 @@
       <el-input v-model="ruleForm.title"   placeholder="标题"/>
     </el-form-item>
     <el-form-item>
-        <Wang_Editer v-model="ruleForm.posts" />
+        <Wang_Editer v-model="ruleForm.content" />
       </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm(ruleFormRef)">
@@ -40,7 +40,7 @@ const ruleFormRef = ref<FormInstance>()
 
 const ruleForm = reactive({
   title: '',
-  posts: '',
+  content: '',
 })
 
 const rules = reactive<FormRules<typeof ruleForm>>({
@@ -58,6 +58,10 @@ const submitForm = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       console.log('submit!')
+      const{ title,content} = ruleForm;
+console.log({ title,content});
+  // 发送 POST 请求到后端
+   posts(12191, { title,content});
     } else {
       console.log('error submit!')
     }

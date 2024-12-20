@@ -4,12 +4,13 @@ import axios from "axios";
 const userInfo = reactive({
   list: [],
 });
-const data = userInfo.list;
+
 async function fetchUserInfo() {
   try {
-    const res = await axios.get("http://localhost:3000/users");
+    const res = await axios.get("http://localhost:3000/posts/12191");
 
     userInfo.list = res.data;
+    console.log(res.data,userInfo.list.ck);
   } catch (error) {
     console.error("Error fetching user info:", error);
     throw error;
@@ -19,6 +20,9 @@ async function fetchUserInfo() {
 onMounted(() => {
   fetchUserInfo();
 });
+import {useInfoStore} from '@/stores/userInfo'
+
+ const  Info=useInfoStore().userInfo
 </script>
 
 <template>
@@ -29,30 +33,30 @@ onMounted(() => {
           <div class="ck">
             <el-breadcrumb class="ck" separator="|">
               <el-breadcrumb-item :to="{ path: '/' }">
-                查看：<span class="ck-red">{{ data.gold }}</span></el-breadcrumb-item
+                查看：<span class="ck-red">{{ userInfo.list.ck  }}</span></el-breadcrumb-item
               >
               <el-breadcrumb-item :to="{ path: '/' }">
-                回复：<span class="hf-red">{{ data.gold }}</span></el-breadcrumb-item
+                回复：<span class="hf-red">{{userInfo.list.hf   }}</span></el-breadcrumb-item
               >
             </el-breadcrumb>
           </div>
         </div>
         <div class="user-line"></div>
         <div class="id-container">
-          <span class="id">{{ data.title }}</span>
+          <span class="id">{{ Info.username }}</span>
         </div>
         <div class="avatar">
           <el-avatar :size="150">
             <!-- 头像 -->
-            <img src="@/assets/img/user/aside_img.jpg" alt="头像加载失败" />
+            <img :src=Info.avatar alt="头像加载失败" />
           </el-avatar>
         </div>
         <div>
           <table>
             <tr>
-              <td>{{ userInfo.theme }}</td>
-              <td>{{ userInfo.posts }}</td>
-              <td>{{ userInfo.integral }}</td>
+              <td>{{ userInfo.list.theme }}</td>
+              <td>{{ userInfo.list.posts }}</td>
+              <td>{{ userInfo.list. integral }}</td>
             </tr>
             <tr>
               <td>主题</td>
@@ -69,7 +73,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .el-aside {
-  width: 20%;
+  width: 200px;
   height: 500px;
   overflow-y: hidden;
   background-color: rgb(240, 234, 234);
@@ -133,8 +137,8 @@ table {
   margin: 20px auto;
   border-collapse: collapse; /* 合并边框，使得内边框显示效果更好 */
   td {
-    padding: 2px;
-    border: 2px solid rgb(114, 103, 103); /* 设置表格、表头和单元格的外边框，但不会影响内边框效果 */
+    padding: 5px;
+    border: 1.5px solid rgb(133, 128, 128); /* 设置表格、表头和单元格的外边框，但不会影响内边框效果 */
   }
   td:first-child,
   td:last-child {
@@ -148,8 +152,13 @@ table {
 
     border-bottom: none;
   }
+  tr:nth-child(1) {
+    color: rgb(97, 92, 92);
+    font-weight: bolder;
+  }
   tr:nth-child(2) {
     color: grey;
+    font-weight: 700;
   }
 }
 
