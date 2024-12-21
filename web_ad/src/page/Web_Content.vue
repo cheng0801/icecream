@@ -1,6 +1,6 @@
 <script setup>
 import my_table from "../components/Web_content/my_table.vue";
-import Web_home from "@/components/Web_content/Web_home.vue";
+import Web_home from "@/components/Web_content/Web_content_header.vue";
 import Web_content_Img from "./Web_content_Img.vue";
 
 </script>

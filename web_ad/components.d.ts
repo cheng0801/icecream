@@ -69,6 +69,7 @@ declare module 'vue' {
     User_content: typeof import('./src/components/Web_content/user_content/user_content.vue')['default']
     User_side_Images: typeof import('./src/components/Web_content/user_content/user_side_Images.vue')['default']
     Wang_Editer: typeof import('./src/components/Wang_Editer.vue')['default']
-    Web_home: typeof import('./src/components/Web_content/Web_home.vue')['default']
+    Web_content_header: typeof import('./src/components/Web_content/Web_content_header.vue')['default']
+    Web_home: typeof import('./src/components/Web_content/Web_content_header.vue')['default']
   }
 }

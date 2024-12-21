@@ -1,6 +1,6 @@
  <script setup>
-import { reactive, onMounted, ref, computed } from "vue";
-
+import { reactive, onMounted, ref, computed,watch } from "vue";
+import ElPagination  from "@/components/Pagination/my_Pagination.vue";
 import requst from "../../utils/request";
 const userInfo = reactive({
   list: [],
@@ -51,14 +51,17 @@ const updateTableData = () => {
   const start = (paginationData.pageNum - 1) * paginationData.pageSize;
   const end = start + paginationData.pageSize;
 
-  tableData.list = userInfo.list.slice(start, end);
+  tableData.list = filteredAndFormattedTableData.value.slice(start, end);
+  tableData.total=filteredAndFormattedTableData.value.length
+  console.log(tableData.list,filteredAndFormattedTableData.value, filteredAndFormattedTableData.value.length);
 };
 
 const filterTableData = computed(() =>
-  tableData.list.filter(
+userInfo.list.filter(
     (data) =>
       !search.value || data.username?.toLowerCase().includes(search.value.toLowerCase())
   )
+  
 );
 
 // 计算属性，用于过滤和格式化表格数据
@@ -117,13 +120,15 @@ function formatTimeDifference(update_time) {
   return timeDifferenceString;
 }
 
+watch(search,updateTableData)
+
 onMounted(() => {
   fetchUserInfo();
 });
 </script>
 
 <template> 
-    <el-table :data="filteredAndFormattedTableData" style="width: 100%">
+    <el-table :data="tableData.list" style="width: 100%">
       <el-table-column prop="id" label="ID" />
       <el-table-column prop="username" label="用户名">
         <template #default="scope">
@@ -145,7 +150,7 @@ onMounted(() => {
       </el-table-column>
     </el-table>   
     <div>
-      <el-pagination
+     <ElPagination
         v-model:current-page="paginationData.pageNum"
         :page-size="paginationData.pageSize"
         :page-sizes="[10, 20, 30, 40]"
@@ -153,7 +158,8 @@ onMounted(() => {
         :total="tableData.total"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-      />
+     />
+      
     </div>
   
 </template>

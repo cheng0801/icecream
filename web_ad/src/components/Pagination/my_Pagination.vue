@@ -6,7 +6,7 @@
 </template>
  
 <script setup>
-const currentPage = defineModel("currentPage", { type: Number, default: 4 })
+const currentPage = defineModel("currentPage", { type: Number, default: 1 })
 const pageSize = defineModel("pageSize", { type: Number, default: 10 })
  
 const emits = defineEmits(["handleSizeChange", "handleCurrentChange"])

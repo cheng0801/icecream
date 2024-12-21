@@ -4,6 +4,7 @@
     <div class="container">
       <TableCustom :columns="columns" :tableData="tableData" :total="total" :viewFunc="handleView"
         :delFunc="handleDelete" :editFunc="editUpdata" :refresh="refresh" @handleSizeChange="handleSizeChange"
+        :layout="layout"
         @handleCurrentChange="handleCurrentChange">
         <template #toolbarBtn>
           <el-button type="warning" :icon="CirclePlusFilled" @click="visible = true">新增</el-button>
@@ -75,7 +76,7 @@ const query = reactive({
   username:""
 });
 
-
+const layout=ref("total,sizes, prev, pager, next,jumper")
 // 表格相关
 let columns = ref([
   { type: "index", label: "序号", width: 55, align: "center" },

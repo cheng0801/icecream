@@ -1,11 +1,11 @@
 <script setup>
 import user_side_Images from "./user_side_Images.vue";
 import El_aside from "./el_aside.vue";
-// import El_footer from "./el_footer.vue";
-import El_header from "./el_header.vue";
+
+import El_header from "@/components/Web_content/Web_content_header.vue";
 
 import Web_Header from "@/page/Web_Header.vue";
-import El_main from "./el_main.vue";
+
 </script>
 
 <template>
@@ -21,8 +21,6 @@ import El_main from "./el_main.vue";
         <el-container>
           <El_aside />
           <RouterView></RouterView>
-          
-          <!-- <El_main /> -->
         </el-container>
         <El_footer />
       </el-container>
