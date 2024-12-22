@@ -55,7 +55,7 @@
           </el-tooltip>
         </div>
         <!-- 用户头像 -->
-        <el-avatar class="user-avator" :size="30" :src="imgurl" />
+        <el-avatar class="user-avator" :size="30" :src="imgurl" @click="headerLogin"/>
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
@@ -94,8 +94,17 @@ const imgurl=Info.userInfo.avatar
 const token = useTokenStore();
 
 
-// const username: string | null = localStorage.getItem('vuems_name');
-// const message: number = 2;
+const router = useRouter();
+//获取当前路由
+const route = useRoute()
+
+const headerLogin=()=>{
+  if(Info.userInfo.username ==''){
+    router.push('/log')
+  } else{
+    router.push('/user_center')
+  }
+}
 
 const sidebar = useSidebarStore();
 // 侧边栏折叠
@@ -110,9 +119,7 @@ onMounted(() => {
 });
 
 // // 用户名下拉菜单选择事件
-const router = useRouter();
-//获取当前路由
-const route = useRoute()
+
 const currentPath = route.path;
 
 console.log(currentPath)
@@ -121,6 +128,7 @@ const handleCommand = (command) => {
   if (command == "loginout") {
     token.saveToken();
     Info.remove()
+    Info.saveInfo('')
     router.push("/log");
   } else if (command == "user") {
     router.push("/user_center");

@@ -1,46 +1,54 @@
 <template>
   <div class="login-bg">
     <div class="login-container">
-      <div class="login-header">
-        <img class="logo mr10" src="@/assets/img/logo.svg" alt="" />
-        <div class="login-title">公益特色</div>
-      </div>
-      <el-form ref="ruleFormRef" style="max-width: 600px" :model="ruleForm" status-icon :rules="rules"
-        label-width="auto" size="large">
-        <el-form-item prop="username">
-          <!-- autocomplete 是否显示 * -->
-          <el-input v-model="ruleForm.username" autocomplete="off" placeholder="用户名">
-            <template #prepend>
-              <el-icon>
-                <User />
-              </el-icon>
-            </template>
-          </el-input>
-        </el-form-item>
-        <el-form-item prop="pass">
-          <el-input v-model="ruleForm.password" type="password" autocomplete="on" placeholder="密码">
-            <template #prepend>
-              <el-icon>
-                <Lock />
-              </el-icon>
-            </template>
-          </el-input>
-        </el-form-item>
-        <div class="pwd-tips">
-          <el-checkbox class="pwd-checkbox" v-model="checked" label="记住密码" />
-          <RouterLink class="RouterLink" :to="{ path: '/rest_psd' }">忘记密码</RouterLink>
-        </div>
+      <router-link to="/" class="toWeb">
+        <el-icon :size="20">
+          <HomeFilled />
+        </el-icon>
+      </router-link>
+      <div class="login-content">
 
-        <div class="btn">
-          <el-button class="login-btn" type="primary" size="large" @click="submitForm(ruleFormRef)"
-            :loading="isLoading">登录</el-button>
-          <el-button class="login-btn" size="large" @click="resetForm(ruleFormRef)">重填</el-button>
+        <div class="login-header">
+          <img class="logo mr10" src="@/assets/img/logo.svg" alt="" />
+          <div class="login-title">公益特色</div>
         </div>
-        <p class="login-text">
-          没有账号？
-          <RouterLink class="RouterLink" :to="{ path: '/sign' }">立即注册</RouterLink>
-        </p>
-      </el-form>
+        <el-form ref="ruleFormRef" style="max-width: 600px" :model="ruleForm" status-icon :rules="rules"
+          label-width="auto" size="large">
+          <el-form-item prop="username">
+            <!-- autocomplete 是否显示 * -->
+            <el-input v-model="ruleForm.username" autocomplete="off" placeholder="用户名">
+              <template #prepend>
+                <el-icon>
+                  <User />
+                </el-icon>
+              </template>
+            </el-input>
+          </el-form-item>
+          <el-form-item prop="pass">
+            <el-input v-model="ruleForm.password" type="password" autocomplete="on" placeholder="密码">
+              <template #prepend>
+                <el-icon>
+                  <Lock />
+                </el-icon>
+              </template>
+            </el-input>
+          </el-form-item>
+          <div class="pwd-tips">
+            <el-checkbox class="pwd-checkbox" v-model="checked" label="记住密码" />
+            <RouterLink class="RouterLink" :to="{ path: '/rest_psd' }">忘记密码</RouterLink>
+          </div>
+
+          <div class="btn">
+            <el-button class="login-btn" type="primary" size="large" @click="submitForm(ruleFormRef)"
+              :loading="isLoading">登录</el-button>
+            <el-button class="login-btn" size="large" @click="resetForm(ruleFormRef)">重填</el-button>
+          </div>
+          <p class="login-text">
+            没有账号？
+            <RouterLink class="RouterLink" :to="{ path: '/sign' }">立即注册</RouterLink>
+          </p>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
@@ -211,6 +219,18 @@ const resetForm = (formEl: FormInstance | undefined) => {
   background: url(@/assets/img/login-bg.jpg) center/cover no-repeat;
 }
 
+.login-content {
+  padding: 40px 50px 50px ;
+  box-sizing: border-box;
+
+}
+
+.toWeb {
+  color: rgb(243, 170, 170);
+  top: 10px;
+  margin-left: 10px;
+}
+
 .login-header {
   display: flex;
   align-items: center;
@@ -232,9 +252,9 @@ const resetForm = (formEl: FormInstance | undefined) => {
   width: 450px;
   border-radius: 5px;
   background: #fff;
-  padding: 40px 50px 50px;
-  box-sizing: border-box;
+padding-top: 10px;
 }
+
 
 .mouse {
   margin-top: -25px;
