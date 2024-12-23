@@ -101,6 +101,8 @@ const route = useRoute()
 const headerLogin=()=>{
   if(Info.userInfo.username ==''){
     router.push('/log')
+  } else if(Info.userInfo.username ===undefined) {
+    router.push('/log')
   } else{
     router.push('/user_center')
   }

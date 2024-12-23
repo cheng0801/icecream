@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    El__header: typeof import('./src/components/Web_content/user_content/el_header.vue')['default']
     El_aside: typeof import('./src/components/Web_content/user_content/el_aside.vue')['default']
     El_footer: typeof import('./src/components/Web_content/user_content/el_footer.vue')['default']
     El_header: typeof import('./src/components/Web_content/user_content/el_header.vue')['default']

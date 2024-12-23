@@ -2,9 +2,10 @@
 import user_side_Images from "./user_side_Images.vue";
 import El_aside from "./el_aside.vue";
 
-import El_header from "@/components/Web_content/Web_content_header.vue";
+import Web_content_header from "@/components/Web_content/Web_content_header.vue";
 
 import Web_Header from "@/page/Web_Header.vue";
+import El_header from "./el_header.vue";
 
 </script>
 
@@ -13,13 +14,14 @@ import Web_Header from "@/page/Web_Header.vue";
   <el-container class="box">
     <user_side_Images />
     <el-container class="main-box">
+<El_header/>
       <el-container class="web-header-container">
         <Web_Header class="centered-header" />
       </el-container>
       <el-container class="user-content">
-        <El_header />
+        <Web_content_header />
         <el-container>
-          <El_aside />
+          <El_aside class="sticky-div"/>
           <RouterView></RouterView>
         </el-container>
         <El_footer />
@@ -66,10 +68,17 @@ import Web_Header from "@/page/Web_Header.vue";
 }
 
 .user-content {
-  margin-top: 50px;
+  margin-top: 10px;
   display: flex;
   flex-direction: column; // 列方向布局
   width: 100%; // 占据全部可用宽度
+}
+
+.sticky-div {
+    position: -webkit-sticky; /* 对于旧版 Safari 浏览器 */
+    position: sticky;
+    top: 70px; /* 当滚动到距离顶部 70px 时固定 */
+   
 }
 .test {
   .user-content {

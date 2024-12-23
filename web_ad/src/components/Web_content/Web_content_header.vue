@@ -33,7 +33,7 @@ const cs=ref('11114555655')
   
   background-color: gainsboro;
   margin: 0;
-  margin-top: 80px;
+  // margin-top: 10px;
   margin-bottom: 20px;
   width: 100%;
   .el-breadcrumb { 
