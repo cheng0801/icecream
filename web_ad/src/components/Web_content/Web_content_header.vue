@@ -6,10 +6,10 @@ const cs=ref('11114555655')
 <template>
   <el-header>    
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: '' }">
+      <el-breadcrumb-item :to="{ path: '/' }">
         <el-icon :size="15"><HomeFilled /></el-icon>
         </el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '' }">
+        <el-breadcrumb-item :to="{ path: '/' }">
         首页
         </el-breadcrumb-item>
       <el-breadcrumb-item>
