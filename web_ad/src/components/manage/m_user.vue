@@ -31,45 +31,9 @@ import TableDetail from "@/components/manage/m_t_detail.vue";
 import TableSearch from "@/components/manage/m_search.vue";
 import TableEdit from "./m_edit.vue";
 
-// import { FormOption, FormOptionList } from "@/types/form-option";
+import { FormOption, FormOptionList } from "@/types/form-option";
+import {User} from "@/types/user"
 
-//  interface User {
-//     id: number;
-//     name: string;
-//     password: string;
-//     email: string;
-//     phone: string;
-//     role: string;
-//     date: string;
-// }
-
-//  interface Register {
-//     username: string;
-//     password: string;
-//     email: string;
-// }
-
-//  interface FormOption {
-//     list: FormOptionList[];
-//     labelWidth?: number | string;
-//     span?: number;
-
-// }
-
-//  interface FormOptionList {
-//     prop: string;
-//     label: string;
-//     type: string;
-//     placeholder?: string;
-//     disabled?: boolean;
-//     opts?: any[];
-//     format?: string;
-//     activeValue?: any;
-//     inactiveValue?: any;
-//     activeText?: string;
-//     inactiveText?: string;
-//     required?: boolean;
-// }
 
 // 查询相关
 const query = reactive({

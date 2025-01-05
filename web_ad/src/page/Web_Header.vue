@@ -28,34 +28,34 @@
           <span class="btn-bell-badge"></span>
         </div>
         <!-- <RouterLink to="/">       -->
-          <div class="btn-icon" v-if="currentPath === '/user_center'">
-          <el-tooltip effect="dark" content="首页"  placement="bottom">
+        <div class="btn-icon" v-if="currentPath === '/user_center'">
+          <el-tooltip effect="dark" content="首页" placement="bottom">
             <i class="el-icon-lx-full"><el-icon :size="30">
                 <House @click=" router.push('/')" />
               </el-icon></i>
           </el-tooltip>
-        </div>       
-      <!-- </RouterLink> -->
+        </div>
+        <!-- </RouterLink> -->
 
-            
-          <div class="btn-icon" v-if="currentPath === '/manage'">
-          <el-tooltip effect="dark" content="首页"  placement="bottom">
+
+        <div class="btn-icon" v-if="currentPath === '/manage'">
+          <el-tooltip effect="dark" content="首页" placement="bottom">
             <i class="el-icon-lx-full"><el-icon :size="30">
-                <House @click=" router.push('/')"/>
+                <House @click=" router.push('/')" />
               </el-icon></i>
           </el-tooltip>
-        </div>       
-     
-     
+        </div>
+
+
         <div class="btn-icon" v-if="currentPath === '/manage'">
-          <el-tooltip effect="dark" content="全屏" placement="bottom" >
+          <el-tooltip effect="dark" content="全屏" placement="bottom">
             <i class="el-icon-lx-full"><el-icon :size="30">
-                <FullScreen @click="setFullScreen"/>
+                <FullScreen @click="setFullScreen" />
               </el-icon></i>
           </el-tooltip>
         </div>
         <!-- 用户头像 -->
-        <el-avatar class="user-avator" :size="30" :src="imgurl" @click="headerLogin"/>
+        <el-avatar class="user-avator" :size="30" :src="imgurl" @click="headerLogin" />
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
@@ -89,7 +89,7 @@ import { useRouter, useRoute } from "vue-router";
 // import imgurl from '../assets/img/img.jpg';
 
 const Info = useInfoStore();
-const imgurl=Info.userInfo.avatar
+const imgurl = Info.userInfo.avatar
 
 const token = useTokenStore();
 
@@ -98,12 +98,12 @@ const router = useRouter();
 //获取当前路由
 const route = useRoute()
 
-const headerLogin=()=>{
-  if(Info.userInfo.username ==''){
+const headerLogin = () => {
+  if (Info.userInfo.username == '') {
     router.push('/log')
-  } else if(Info.userInfo.username ===undefined) {
+  } else if (Info.userInfo.username === undefined) {
     router.push('/log')
-  } else{
+  } else {
     router.push('/user_center')
   }
 }

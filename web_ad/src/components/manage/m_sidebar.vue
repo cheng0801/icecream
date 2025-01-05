@@ -45,12 +45,12 @@ import { useSidebarStore } from '@/stores/m_sidebar';
 import { useRoute } from 'vue-router';
 // import { menuData } from '@/components/menu';
 const menuData = [
-    {
-        id: '0',
-        title: '系统首页',
-        index: '/dashboard',
-        icon: 'Odometer',
-    },
+    // {
+    //     id: '0',
+    //     title: '系统首页',
+    //     index: '/dashboard',
+    //     icon: 'Odometer',
+    // },
     {
         id: '1',
         title: '系统管理',
@@ -69,12 +69,12 @@ const menuData = [
                 index: '/manage/system-role',
                 title: '角色管理',
             },
-            {
-                id: '13',
-                pid: '1',
-                index: '/system-menu',
-                title: '菜单管理',
-            },
+            // {
+            //     id: '13',
+            //     pid: '1',
+            //     index: '/system-menu',
+            //     title: '菜单管理',
+            // },
         ],
     },
 ]

@@ -7,7 +7,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    El__header: typeof import('./src/components/Web_content/user_content/el_header.vue')['default']
     El_aside: typeof import('./src/components/Web_content/user_content/el_aside.vue')['default']
     El_footer: typeof import('./src/components/Web_content/user_content/el_footer.vue')['default']
     El_header: typeof import('./src/components/Web_content/user_content/el_header.vue')['default']
@@ -60,7 +59,6 @@ declare module 'vue' {
     M_user: typeof import('./src/components/manage/m_user.vue')['default']
     My_Pagination: typeof import('./src/components/Pagination/my_Pagination.vue')['default']
     My_table: typeof import('./src/components/Web_content/my_table.vue')['default']
-    My_test: typeof import('./src/components/my_test.vue')['default']
     Post_msg: typeof import('./src/components/Web_content/user_content/post_msg.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -71,6 +69,5 @@ declare module 'vue' {
     User_side_Images: typeof import('./src/components/Web_content/user_content/user_side_Images.vue')['default']
     Wang_Editer: typeof import('./src/components/Wang_Editer.vue')['default']
     Web_content_header: typeof import('./src/components/Web_content/Web_content_header.vue')['default']
-    Web_home: typeof import('./src/components/Web_content/Web_content_header.vue')['default']
   }
 }
