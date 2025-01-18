@@ -1,12 +1,85 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 const img1 = ref(true)
 const img2 = ref(true)
 const img3 = ref(true)
 const img4 = ref(true)
+import { getData } from '@/utils/request';
 
 
+const imgUrl1 = ref({});
+const imgUrl2 = ref({});
+const imgUrl3 = ref({});
+const imgUrl4 = ref({});
 
+import { moren } from '@/assets/img/web_ad';
+
+const getUrl1 = async () => {
+  try {
+    const res = await getData("images/5");
+    // 假设res.data是一个包含多个图片的数组，每个图片对象有一个url属性
+    if(res.data){
+      imgUrl1.value = res.data; // 将res.data赋值给imgUrl.value
+    }else {
+      imgUrl1.value=moren[5]
+    }
+    
+    // 正确输出第一个图片的url（如果存在）
+  
+  } catch (error) {
+    console.error("Failed to fetch image URLs:", error);
+  }
+};
+
+const getUrl2 = async () => {
+  try {
+    const res = await getData("images/6");
+    // 假设res.data是一个包含多个图片的数组，每个图片对象有一个url属性
+    if(res.data){
+      imgUrl2.value = res.data; // 将res.data赋值给imgUrl.value
+    }else {
+      imgUrl2.value=moren[5]
+    }
+  } catch (error) {
+    console.error("Failed to fetch image URLs:", error);
+  }
+};
+
+const getUrl3 = async () => {
+  try {
+    const res = await getData("images/7");
+    // 假设res.data是一个包含多个图片的数组，每个图片对象有一个url属性
+    if(res.data){
+      imgUrl3.value = res.data; // 将res.data赋值给imgUrl.value
+    }else {
+      imgUrl3.value=moren[5]
+    }
+  } catch (error) {
+    console.error("Failed to fetch image URLs:", error);
+  }
+};
+
+const getUrl4 = async () => {
+  try {
+    const res = await getData("images/8");
+    if(res.data){
+      imgUrl4.value = res.data; // 将res.data赋值给imgUrl.value
+    }else {
+      imgUrl4.value=moren[5]
+    }
+  
+  } catch (error) {
+    console.error("Failed to fetch image URLs:", error);
+  }
+};
+
+onMounted(() => {
+  
+  getUrl1();
+  getUrl2();
+  getUrl3();
+  getUrl4();
+})
 </script>
 
 <template>
@@ -20,37 +93,39 @@ const img4 = ref(true)
     </div> -->
 
     <div class="right-container">
-        <!--  <div v-show="img1" class="img-above">
-         盒子一起消失，没有占位下面图片会向上-->
-
-        <div class="img-above">
-            <span class="image-remove-view1" v-show="img1" @click="img1 = !img1">+</span>
-            <a href=""> <img v-if="img1" src="../assets/img/side/view1.jpg" class="cover-img"></a>
-        </div>
-
-        <div class="img-below">
-            <span class="image-remove-view2" v-show="img2" @click="img2 = !img2">+</span>
-            <a href=""> <img v-if="img2" src="../assets/img/side/view2.jpg" class="cover-img"></a>
-        </div>
+    <!--  <div v-show="img1" class="img-above">
+       盒子一起消失，没有占位下面图片会向上-->
+    <div class="img-above">
+      <span class="image-remove-view1" v-show="img1" @click="img1 = !img1">+</span>
+      <a :href=imgUrl1.url target="_blank"> <img v-if="img1" :src="imgUrl1.imgUrl" class="cover-img" alt="1111"></a>
     </div>
-
-    <div class="left-container">
-
-        <div class="img-above">
-            <span class="image-remove-home1" v-show="img3" @click="img3 = !img3">+</span>
-            <a href=""> <img v-if="img3" src="../assets/img/side/home1.jpg" class="cover-img"></a>
-        </div>
-
-        <div  class="img-below">
-            <span class="image-remove-home2" v-show="img4" @click="img4 = !img4">+</span>
-            <a href=""> <img v-if="img4" src="../assets/img/side/home2.jpg" class="cover-img"></a>
-        </div>
-
+    <div class="img-below">
+      <span class="image-remove-view2" v-show="img2" @click="img2 = !img2">+</span>
+      <a :href=imgUrl2.url target="_blank"> <img v-if="img2" :src="imgUrl2.imgUrl" class="cover-img"></a>
     </div>
+  </div>
+  <div class="left-container">
+    <div class="img-above">
+      <span class="image-remove-home1" v-show="img3" @click="img3 = !img3">+</span>
+      <a :href=imgUrl3.url target="_blank"> <img v-if="img3" :src="imgUrl3.imgUrl" class="cover-img"></a>
+    </div>
+    <div class="img-below">
+      <span class="image-remove-home2" v-show="img4" @click="img4 = !img4">+</span>
+      <a :href=imgUrl4.url target="_blank"> <img v-if="img4" :src="imgUrl4.imgUrl" class="cover-img"></a>
+    </div>
+  </div>
 
 </template>
 
 <style lang="scss" scoped>
+.img_upload {
+    z-index: 1;
+}
+
+.img_over {
+    z-index: 9999;
+}
+
 .img-above {
     /* background-color: aqua; */
     width: 100%;
@@ -62,10 +137,11 @@ const img4 = ref(true)
     /* background-color: aqua; */
     width: 100%;
     height: 50%;
-top: 50%;
+    top: 50%;
 }
 
 img {
+    z-index: 9999;
     width: 100%;
     height: 100%;
 
@@ -139,9 +215,11 @@ img {
 .image-remove-view2,
 .image-remove-home1,
 .image-remove-home2 {
-    
-    line-height: 15px; /* 与高度相同以实现垂直居中 */
+
+    line-height: 15px;
+    /* 与高度相同以实现垂直居中 */
 }
+
 .right-container {
     margin-right: 0;
     right: 0;

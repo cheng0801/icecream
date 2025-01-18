@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, onMounted, ref, computed, watch } from "vue";
 import ElPagination from "@/components/Pagination/my_Pagination.vue";
-import { put, getData } from '@/utils/request';
+import {getData} from "../../utils/request";
 import { getToken } from "@/utils/auth";
 const token = getToken()
 const userInfo = reactive({
@@ -12,7 +12,7 @@ const userInfo = reactive({
 
 const paginationData = reactive({
   pageNum: 1, //页码
-  pageSize: 40, //每页多少条
+  pageSize: 10, //每页多少条
 });
 
 const tableData = reactive({
@@ -23,44 +23,26 @@ const tableData = reactive({
 const search = ref("");
 
 //异步
-// async function fetchUserInfo() {
-//   try {
-//     // const res = await getData("api/theme/detail_1");
-//     const res = await getData("post");
-//     console.log(res.data,"响应列表数据");
-//     // const { status, user_info,data_theme } = res.data;
-//     const { status, user_info,data_theme } = res.data[0];
-//     console.log(status, user_info,data_theme.browse,"解构数据");
-//     userInfo.list.push(data_theme) /*|| res.data*/; // 假设后端返回的数据中有一个items字段，或者直接是数据数组
-
-//     tableData.total = res.data.total || userInfo.list.length; // 从后端获取total，或者如果后端不提供，则使用列表长度（但这通常不是正确的做法，因为列表可能只包含当前页的数据）
-
-//     updateTableData();
-//   } catch (error) {
-//     console.error("Error fetching user info:", error);
-//     throw error;
-//   }
-// }
-
 async function fetchUserInfo() {
+  
   try {
-    const res = await getData("api/theme/list/1");
-    // const res = await getData("post");
-    console.log(res.data,"响应列表数据");
-    const { status, user_info,data_theme } = res.data;
-    // const { status, user_info,data_theme } = res.data[0];
-    console.log(status, user_info,data_theme,"解构数据");
-    userInfo.list=data_theme /*|| res.data*/; // 假设后端返回的数据中有一个items字段，或者直接是数据数组
-
-    tableData.total = res.data.total || userInfo.list.length; // 从后端获取total，或者如果后端不提供，则使用列表长度（但这通常不是正确的做法，因为列表可能只包含当前页的数据）
+    const res = await getData(/*"api/user/detail/4"*/"api/theme/list/1", token);
+    console.log(res.data,"响应数据");
+    const {data_theme,status,total}=res.data;
+    console.log(data_theme,111111);
+    // userInfo.list = data_theme /*|| res.data*/; // 假设后端返回的数据中有一个items字段，或者直接是数据数组
+    // userInfo.list.push(data_theme) 
+    userInfo.list=data_theme
+    console.log(userInfo.list,"表格数据");
+    tableData.total = total /*|| data_theme.length*/; // 从后端获取total，或者如果后端不提供，则使用列表长度（但这通常不是正确的做法，因为列表可能只包含当前页的数据）
 
     updateTableData();
   } catch (error) {
-    console.error("首页列表加载失败:", error);
+    console.error("Error fetching user info:", error);
     throw error;
   }
 }
-
+console.log(userInfo.list,123444444444444);
 const handleSizeChange = (newSize) => {
   paginationData.pageSize = newSize;
   paginationData.pageNum = 1;
@@ -84,7 +66,7 @@ const updateTableData = () => {
 const filterTableData = computed(() =>
   userInfo.list.filter(
     (data) =>
-      !search.value || data.username?.toLowerCase().includes(search.value.toLowerCase())
+      !search.value || data.title?.toLowerCase().includes(search.value.toLowerCase())
   )
 
 );
@@ -144,13 +126,6 @@ function formatTimeDifference(update_time) {
   }
   return timeDifferenceString;
 }
-//对类容进行缩略
-const truncatedTitle = (title, maxLength = 30) => {
-  if (title.length > maxLength) {
-    return title.slice(0, maxLength) + '...';
-  }
-  return title;
-};
 
 watch(search, updateTableData)
 
@@ -160,33 +135,31 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-table :data="tableData.list" style="width: 100%">
-    <!-- <el-table-column prop="id" label="ID" /> -->
-      
-    <el-table-column prop="title" label="主题" width="500px">
+  <el-table :data="tableData.list" style="width: 100% ; height:400px">
+    <el-table-column prop="id" label="ID" />
+    <el-table-column prop="title" label="主题">
       <template #default="scope">
         <router-link class="route-link" :to="{ path: '/user/' + scope.row.id }">
-          {{ truncatedTitle(scope.row.title) }}
+          {{ scope.row.title }}
         </router-link>
       </template>
     </el-table-column>
-    <el-table-column prop="username" label="作者" />
-    <el-table-column prop="browse" label="查看" />
     <el-table-column label="更新时间">
       <template #default="scope">
         {{ formatTimeDifference(scope.row.update_time) }}
       </template>
     </el-table-column>
     <el-table-column align="right">
-      <!-- <template #header>
+      <template #header>
         <el-input v-model="search" size="small" placeholder="查找" />
-      </template> -->
+      </template>
     </el-table-column>
   </el-table>
   <div>
     <ElPagination v-model:current-page="paginationData.pageNum" :page-size="paginationData.pageSize"
-      :page-sizes="[160, 120, 80, 40]" layout="total,sizes, prev, pager, next, jumper" :total="tableData.total"
-      @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      :page-sizes="[10, 20, 30, 40]" layout="total,sizes, prev, pager, next, jumper" :total="tableData.total"
+      @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      class="el-pag" />
 
   </div>
 
@@ -197,4 +170,5 @@ onMounted(() => {
   text-decoration: none;
   color: rgb(95, 90, 90);
 }
+
 </style>

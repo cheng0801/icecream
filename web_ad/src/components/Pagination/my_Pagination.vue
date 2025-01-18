@@ -7,7 +7,7 @@
  
 <script setup>
 const currentPage = defineModel("currentPage", { type: Number, default: 1 })
-const pageSize = defineModel("pageSize", { type: Number, default: 10 })
+const pageSize = defineModel("pageSize", { type: Number, default: 40 })
  
 const emits = defineEmits(["handleSizeChange", "handleCurrentChange"])
 const props = defineProps({
@@ -21,7 +21,7 @@ const props = defineProps({
   },
   pageSizes: {
     type: Array,
-    default: [10, 20, 30, 40]
+    default: [100, 200, 300, 40]
   },
   pagerCount: {
     type: Number,

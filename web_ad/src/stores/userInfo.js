@@ -70,8 +70,8 @@ export const useTokenStore = defineStore('token', () => {
     function saveToken(data) {
         try {
             // 如果传入的是字符串，则尝试解析它；否则，直接使用它
-            tokenData.value = typeof data === 'string' ? JSON.parse(data) : data;
-
+            // tokenData.value = typeof data === 'string' ? JSON.parse(data) : data;
+            tokenData.value = data;
         } catch (err) {
             console.error("在保存令牌时发生错误:", err);
             // 可以选择回退到默认的空对象或其他逻辑

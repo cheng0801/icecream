@@ -27,52 +27,46 @@
         </el-tooltip>
       </div>
     </div>
-    <el-table
-      class="mgb20"
-      :style="{ width: '100%' }"
-      border
-      :data="tableData"
-      :row-key="rowKey"
-      @selection-change="handleSelectionChange"
-      table-layout="auto"
-    >
+    <el-table class="mgb20" :style="{ width: '100%' }" border :data="tableData" :row-key="rowKey"
+      @selection-change="handleSelectionChange" table-layout="auto">
       <template v-for="item in columns" :key="item.prop">
-        <el-table-column
-          v-if="item.visible"
-          :prop="item.prop"
-          :label="item.label"
-          :width="item.width"
-          :type="item.type"
-          :align="item.align || 'center'"
-        >
+        <el-table-column v-if="item.visible" :prop="item.prop" :label="item.label" :width="item.width" :type="item.type"
+          :align="item.align || 'center'">
           <template #default="{ row, column, $index }" v-if="item.type === 'index'">
             {{ getIndex($index) }}
           </template>
+          <!-- <template #default="{ row, column, $index }" v-if="item.prop === 'imgUrl'">
+             这里是显示图片的列 
+            <img :src="row[item.prop]" alt="Row Image" style="width: 50px; height: 50px;">
+          </template> -->
+          <template #default="{ row, column, $index }" v-if="item.prop === 'title'">
+            <router-link :to="{ path: '/user/' + row.id }" class="RouterLink"> <!-- 使用 router-link 进行路由跳转 -->
+              {{ row.title }}
+            </router-link>
+          </template>
+
+          <template #default="{ row, column, $index }" v-if="item.prop === 'top'">
+            <el-switch  v-model="row[item.prop]"
+						:active-value="item.activeValue" :inactive-value="item.inactiveValue"
+						:active-text="item.activeText" :inactive-text="item.inactiveText">
+          </el-switch>
+          </template>
+
+          <template #default="{ row, column, $index }" v-if="item.prop === 'imgUrl'">
+            <img :src="row[item.prop]" alt="Row Image" style="width: 50px; height: 50px;">
+          </template>
+        
+
           <template #default="{ row, column, $index }" v-if="!item.type">
             <slot :name="item.prop" :rows="row" :index="$index">
               <template v-if="item.prop == 'operator'">
-                <el-button
-                  type="warning"
-                  size="small"
-                  :icon="View"
-                  @click="viewFunc(row)"
-                >
+                <el-button type="warning" size="small" :icon="View" @click="viewFunc(row)">
                   查看
                 </el-button>
-                <el-button
-                  type="primary"
-                  size="small"
-                  :icon="Edit"
-                  @click="editFunc(row)"
-                >
+                <el-button type="primary" size="small" :icon="Edit" @click="editFunc(row)">
                   编辑
                 </el-button>
-                <el-button
-                  type="danger"
-                  size="small"
-                  :icon="Delete"
-                  @click="handleDelete(row)"
-                >
+                <el-button type="danger" size="small" :icon="Delete" @click="handleDelete(row)">
                   删除
                 </el-button>
               </template>
@@ -87,19 +81,9 @@
         </el-table-column>
       </template>
     </el-table>
-    <el-pagination
-      class="custom_page"
-      v-if="hasPagination"
-      :currentPage="currentPage"
-      :page-size="pageSize"
-      :page-sizes="pageSizes"
-      :background="background"
-      :total="total"
-      :layout="layout"
-      :pager-count="pagerCount"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
+    <el-pagination class="custom_page" v-if="hasPagination" :currentPage="currentPage" :page-size="pageSize"
+      :page-sizes="pageSizes" :background="background" :total="total" :layout="layout" :pager-count="pagerCount"
+      @size-change="handleSizeChange" @current-change="handleCurrentChange" />
   </div>
 </template>
 
@@ -117,7 +101,7 @@ const emits = defineEmits(["handleSizeChange", "handleCurrentChange", "updateTab
 
 
 function handleSizeChange(val) {
- 
+
   console.log(`${val} items per page`);
   pageSize.value = val;
   emits("handleSizeChange", val);
@@ -137,7 +121,10 @@ const props = defineProps({
 
   columns: {
     type: Array as PropType<any[]>,
-    default: [],
+    default: [
+
+    ],
+
   },
   rowKey: {
     type: String,
@@ -165,9 +152,9 @@ const props = defineProps({
   //每页显示个数选择器的选项设置
   pageSizes: {
     type: Array,
-    default: [10, 20, 30, 40,100],
+    default: [10, 20, 30, 40, 100],
   },
-//总页数
+  //总页数
   pagerCount: {
     type: Number,
     default: 5,
@@ -178,23 +165,23 @@ const props = defineProps({
   },
   delFunc: {
     type: Function,
-    default: () => {},
+    default: (row) => { console.log(row, '行数据详情'); },
   },
   viewFunc: {
     type: Function,
-    default: () => {},
+    default: () => { },
   },
   editFunc: {
     type: Function,
-    default: () => {},
+    default: () => { },
   },
   delSelection: {
     type: Function,
-    default: () => {},
+    default: () => { },
   },
   refresh: {
     type: Function,
-    default: () => {},
+    default: () => { },
   },
 });
 
@@ -205,7 +192,6 @@ let {
   hasToolbar,
   hasPagination,
   total,
-
   layout,
 } = toRefs(props);
 
@@ -239,6 +225,47 @@ const getIndex = (index: number) => {
   return index + 1 + (currentPage.value - 1) * pageSize.value;
 };
 getIndex(2);
+
+// 方法，用于格式化时间差异
+function formatTimeDifference(update_time) {
+  // 计算属性，用于过滤和格式化表格数据
+
+  // 假设这是从服务器或其他来源获取的 update_time 字符串
+  const updateTimeStr = update_time;
+
+  // 使用 Date 对象解析这个时间字符串
+  const updateTime = new Date(updateTimeStr);
+
+  // 获取当前时间
+  const now = new Date();
+
+  // 计算时间差（毫秒）
+  const timeDifference = now - updateTime;
+
+  // 将时间差转换为更易读的格式
+  const secondsInMinute = 60;
+  const secondsInHour = 60 * secondsInMinute;
+  const secondsInDay = 24 * secondsInHour;
+
+  let timeDifferenceString;
+
+  if (timeDifference >= secondsInDay * 1000) {
+    // 注意：这里需要将秒转换为毫秒进行比较
+    const days = Math.floor(timeDifference / (secondsInDay * 1000));
+    timeDifferenceString = `${days}天前`;
+  } else if (timeDifference >= secondsInHour * 1000) {
+    const hours = Math.floor(timeDifference / (secondsInHour * 1000));
+    timeDifferenceString = `${hours}小时前`;
+  } else if (timeDifference >= secondsInMinute * 1000) {
+    const minutes = Math.floor(timeDifference / (secondsInMinute * 1000));
+    timeDifferenceString = `${minutes}分钟前`;
+  } else {
+    timeDifferenceString = `刚刚`;
+
+  }
+  return timeDifferenceString;
+}
+
 </script>
 
 <style scoped>
@@ -249,6 +276,12 @@ getIndex(2);
   border: 1px solid #ddd;
   border-radius: 5px;
 }
+
+.RouterLink {
+  text-decoration: none;
+  color: #020f1b;
+  font-weight: bold;
+}
 .table-toolbar {
   display: flex;
   justify-content: space-between;
@@ -258,8 +291,10 @@ getIndex(2);
 
 .table-toolbar-right {
   display: flex;
-  align-items: center; /* 垂直居中 */
+  align-items: center;
+  /* 垂直居中 */
 }
+
 .columns-setting-icon {
   display: block;
   font-size: 18px;

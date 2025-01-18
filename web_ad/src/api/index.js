@@ -1,6 +1,6 @@
 import request from '@/utils/request' 
-
-
+import axios from 'axios';
+import { getToken } from '@/utils/auth';
 
 // export const login=((data)=>{
 //     return request.post('users',{
@@ -11,12 +11,14 @@ import request from '@/utils/request'
 
     //test
     export const login=((data)=>{
-        return request.get('user/0801',{
-        data
-        });
-        });
+        return request.post('api/login',data);
+    });
 
-        
+    export const login1=(()=>{
+        return request.get('api/user/detail/2',getToken());
+    });
+    
+
     export const posts=((id,content)=>{
         return request.patch('posts/'+id,{
       content
@@ -41,23 +43,21 @@ import request from '@/utils/request'
                     data
                     });
                     });
-                    export const fetchUserData11 = ((data) => {
-                        return request.get('user/2',{
+                    export const fetchUserDataImg = ((data) => {
+                        return request.get('images',{
                             data
                             });
                             });
 
-            export const getPosts = ((data) => {
-                return request.get('posts/12191',{
-                    data
-                    });
+            export const getPosts = (() => {
+                return request.get('posts');
                     });
 
-                    export const delPosts = (() => {
-                        return request.del('user/2',{
+                    // export const delPosts = (() => {
+                    //     return request.del('user/2',{
                             
-                            });
-                            });
+                    //         });
+                    //         });
 
 
 // request.interceptors.request.use(onFulifiled:(config) => {

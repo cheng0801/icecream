@@ -8,7 +8,6 @@ import Web_content_Img from "./Web_content_Img.vue";
 <template>
   <div class="content">
     <Web_content_Img class="Main-img" />
-
     <Web_home />
     <my_table />
   </div>
@@ -19,7 +18,7 @@ import Web_content_Img from "./Web_content_Img.vue";
   z-index: 1;
   /* background-color: #ccb4ce; */
   overflow-y: hidden;
-  margin: 176px 0 0 0;
+  margin: 100px 0 20px 0;
   width: 100%;
   height: 100%;
   align-self: center;

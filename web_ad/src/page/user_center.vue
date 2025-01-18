@@ -3,7 +3,7 @@
   <div classs="box">
     <Web_Header />
     <div class="user-container">
-      <el-card class="user-profile" shadow="hover" :body-style="{ padding: '0px' }">
+      <el-card class="user-profile" shadow="hover" :body-style="{ padding: '0px' }" style="width: 300px;">
         <div class="user-profile-bg"></div>
         <div class="user-avatar-wrap">
           <UserAvatar :avatar="Info.avatar" />
@@ -40,11 +40,16 @@
         :body-style="{ padding: '20px 50px', height: '100%', boxSizing: 'border-box' }">
         <el-tabs tab-position="left" v-model='activeName' >
           <el-tab-pane name="label1" label="个人信息"  class="user-tabpane">
-           <div v-if="activeName==='label1'">111</div>
+           <div ><user_info/></div>
           </el-tab-pane>
-          <el-tab-pane name="label2" label="修改密码" class="user-tabpane">
-           
-            <el-form v-if="activeName==='label2'" ref="ruleFormRef" style="max-width: 600px" :model="ruleForm" status-icon :rules="rules"
+          <!-- <el-tab-pane  name="label4" label="帖子管理1"  class="user-tabpane">
+           <div ><user_posts/></div>
+          </el-tab-pane> -->
+          <el-tab-pane  name="label2" label="帖子管理"  class="user-tabpane">
+           <div ><m_user_posts/></div>
+          </el-tab-pane>
+          <el-tab-pane name="label3" label="修改密码" class="user-tabpane">           
+            <el-form v-if="activeName==='label3'" ref="ruleFormRef" style="max-width: 600px" :model="ruleForm" status-icon :rules="rules"
               label-position="top" label-width="auto" class="w500" size="large" >
               <el-form-item label="旧密码：">
               <el-input :type="flagType.flagType === 'password' ? 'password' : 'text'" v-model="ruleForm.old"
@@ -111,10 +116,14 @@ import { useRouter } from "vue-router";
 
 
 import UserAvatar from "@/components/user_center/user_avatar.vue";
+
+import user_info from "@/components/user_center/user_info.vue";
+import user_posts from "@/components/user_center/user_posts.vue";
+import m_user_posts from "@/components/user_center/m_user_posts.vue";
 // https://img2.baidu.com/it/u=2563189020,3546676907&fm=253&fmt=auto&app=120&f=JPEG?w=800&h=1432
 
 // import imgurl from '../assets/img/img.jpg';
-const activeName = ref('lable1')
+const activeName = ref('label1')
 
 const flagType = ref({ flagType: 'password' });
 const showPassword = ref(false);
@@ -248,6 +257,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 }
 
 .user-profile {
+  /* width:300px; */
   position: relative;
 }
 

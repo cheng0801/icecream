@@ -4,8 +4,7 @@
     <div class="container">
       <TableCustom :columns="columns" :tableData="tableData" :total="total" :viewFunc="handleView"
         :delFunc="handleDelete" :editFunc="editUpdata" :refresh="refresh" @handleSizeChange="handleSizeChange"
-        :layout="layout"
-        @handleCurrentChange="handleCurrentChange">
+        :layout="layout" @handleCurrentChange="handleCurrentChange">
         <template #toolbarBtn>
           <el-button type="warning" :icon="CirclePlusFilled" @click="visible = true">新增</el-button>
         </template>
@@ -25,29 +24,28 @@
 import { ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
 import { CirclePlusFilled } from "@element-plus/icons-vue";
-import { fetchUserData, fetchUserData11 } from "@/api";
+import { fetchUserData, fetchUserData11, fetchUserDataImg } from "@/api";
 import TableCustom from "@/components/manage/m_t_custom.vue";
 import TableDetail from "@/components/manage/m_t_detail.vue";
 import TableSearch from "@/components/manage/m_search.vue";
-import TableEdit from "./m_edit.vue";
+import TableEdit from "../m_edit.vue";
 
 import { FormOption, FormOptionList } from "@/types/form-option";
-import {User} from "@/types/user"
-
+import { User } from "@/types/user"
+import { moren } from "@/assets/img/web_ad";
 
 // 查询相关
 const query = reactive({
-  username:""
+  id: ""
 });
 
-const layout=ref("total,sizes, prev, pager, next,jumper")
+const layout = ref("total,sizes, prev, pager, next,jumper")
 // 表格相关
 let columns = ref([
-  { type: "index", label: "序号", width: 55, align: "center" },
-  { prop: "username", label: "用户名" },
-  { prop: "phone", label: "手机号" },
-  { type: 'switch', label: '状态', prop: 'status', required: false, activeText: '启用', inactiveText: '禁用' },
-  
+  { prop: "id", label: "图片位置", width: 55, align: "center" },
+  {type:"image", prop: "imgUrl", label: "图片" },
+  { prop: "url", label: "地址" },
+ 
   { prop: "operator", label: "操作", width: 250 },
 ]);
 const tableData = ref<User[]>([]);
@@ -59,30 +57,45 @@ const currentPage = ref(1);
 const total = ref(0);
 
 const mygetData = async () => {
-  const res = await fetchUserData();
+  const res = await fetchUserDataImg();
   const start = (currentPage.value - 1) * pageSize.value;
-    const end = start + pageSize.value;
-  // console.log(res);
+  const end = start + pageSize.value;
+  console.log(res.data[0].status);
   //首次刷新
-  if(!filterData){
+  if(res.data[0].status===200){
+    if (!filterData) {
     filterData.value = res.data
-  
-  } else{
+
+  } else  {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
-    tableData.value = res.data.slice(start,end)
+    tableData.value = res.data.slice(start, end)
 
     filterData.value = res.data
   }
- 
+  total.value = res.data.length;     
+  } else {
+    res.data=moren
+    console.log(moren,'默认图片');
+    if (!filterData) {
+    filterData.value = res.data
+
+  } else  {
+    const start = (currentPage.value - 1) * pageSize.value;
+    const end = start + pageSize.value;
+    tableData.value = res.data.slice(start, end)
+
+    filterData.value = res.data
+  }
+  total.value = res.data.length;  
+  }
   
-  total.value = res.data.length;
 };
 getData()
 
 
 const searchOpt = ref<FormOptionList[]>([
-  { type: "input", label: "用户名：", prop: "username" },
+  { type: "input", label: "用户名：", prop: "id" },
 ]);
 
 // 过滤和分页的函数
@@ -90,15 +103,15 @@ const filterAndPaginateData = (data, queryName, currentPage, pageSize) => {
   console.log("调用filterAndPaginateData");
   // 先过滤数据
   const filteredData = data.filter(
-    (dataItem) => !queryName || dataItem.username?.toLowerCase().includes(queryName.toLowerCase())
+    (dataItem) => !queryName || dataItem.id?.toLowerCase().includes(queryName.toLowerCase())
   );
 
   // 再分页
   const start = (currentPage - 1) * pageSize;
   const end = start + pageSize;
-  const filterTableData=filteredData.slice(start, end)
- const filterTableDataLength=filteredData.length
-  return {filterTableData,filterTableDataLength}
+  const filterTableData = filteredData.slice(start, end)
+  const filterTableDataLength = filteredData.length
+  return { filterTableData, filterTableDataLength }
 
 };
 
@@ -106,13 +119,13 @@ const filterAndPaginateData = (data, queryName, currentPage, pageSize) => {
 
 
 const handleSearch = () => {
-  
+
   console.log("调用handlesearch");
   // 直接调用过滤和分页函数，并更新 tableData 和 total
-  const a= filterAndPaginateData(filterData.value, query.username, currentPage.value, pageSize.value);
+  const a = filterAndPaginateData(filterData.value, query.id, currentPage.value, pageSize.value);
   tableData.value = a.filterTableData
-  
-  total.value = a.filterTableDataLength 
+
+  total.value = a.filterTableDataLength
 };
 
 // 新增/编辑弹窗相关
@@ -120,23 +133,22 @@ let options = ref<FormOption>({
   labelWidth: "100px",
   span: 12,
   list: [
-    { type: "input", label: "用户名", prop: "username", required: true },
-    { type: "input", label: "手机号", prop: "phone", required: true },
-    { type: "input", label: "密码", prop: "password", required: true },
-    { type: "input", label: "邮箱", prop: "email", required: true },
-    { type: "input", label: "角色", prop: "role", required: true },
+    { type: "select", prop: "id", label: "图片位置", align: "center",opts:[
+    {label:"左下",opt:"左下"},{label:"左上",opt:"左上"},{label:"右下",opt:"右下"},{label:"右上",opt:"右上"},
+    ] },
+    { type: "upload", prop: "imgUrl", label: "图片" },
+    { type: "input", prop: "url", label: "地址" },
   ],
 });
 const visible = ref(false);
 const isEdit = ref(false);
 const rowData = ref({
+  labelWidth: "100px",
   list: [
-    { type: "input", label: "用户名", prop: "username", required: true },
-    { type: "input", label: "手机号", prop: "phone", required: true },
-    { type: "input", label: "密码", prop: "password", required: true },
-    { type: "input", label: "邮箱", prop: "email", required: true },
-    { type: "input", label: "角色", prop: "role", required: true },
-  ],
+
+    { type: "upload", label: "角色", prop: "role", required: true },
+],
+id:null
 });
 //控制编辑框
 const editUpdata = (row) => {
@@ -161,36 +173,38 @@ const viewData = ref({
 const handleView = (row: User) => {
   viewData.value.row = { ...row };
   viewData.value.list = [
-    {
-      prop: "id",
-      label: "用户ID",
-    },
-    {
-      prop: "username",
-      label: "用户名",
-    },
-    {
-      prop: "password",
-      label: "密码",
-    },
-    {
-      prop: "email",
-      label: "邮箱",
-    },
-    {
-      prop: "phone",
-      label: "电话",
-    },
-    {
-      prop: "role",
-      label: "角色",
-    },
-    {
-      prop: "update_time",
-      label: "注册日期",
-    },
+  { type: "input", prop: "id", label: "图片位置", align: "center"  },
+    { type: "upload", prop: "imgUrl", label: "图片" },
+    { type: "input", prop: "url", label: "地址" },
+    // {
+    //   prop: "id",
+    //   label: "用户ID",
+    // },
+    // {
+    //   prop: "username",
+    //   label: "用户名",
+    // },
+    // {
+    //   prop: "password",
+    //   label: "密码",
+    // },
+    // {
+    //   prop: "email",
+    //   label: "邮箱",
+    // },
+    // {
+    //   prop: "phone",
+    //   label: "电话",
+    // },
+    // {
+    //   prop: "role",
+    //   label: "角色",
+    // },
+    // {
+    //   prop: "update_time",
+    //   label: "注册日期",
+    // },
   ];
-  
   visible1.value = true;
 };
 
@@ -212,18 +226,17 @@ import { delData, getData, put, mypostData } from "@/utils/request";
 
 const handleDelete = async (row: User) => {
   const url = row.id;
-  const res = await delData("user/" + url);
+  const res = await delData("images/" + url);
   console.log(res);
   updateData();
   ElMessage.success("删除成功");
 };
 
 //编辑相关
-const handleEdit = (row) => {
+const handleEdit = (row: User) => {
 
   rowData.value = { ...row };
-  
-  console.log(rowData.value.id, '行数据详情');
+  console.log(rowData.value.id, row);
   const id = rowData.value.id;
   //上传修改
   if (rowData.value.id) {
@@ -237,55 +250,10 @@ const handleEdit = (row) => {
   visible.value = false;
 };
 
-// 生成随机角色
-
-// function generateUserData(count) {
-//   const roles = ["管理员", "普通用户"];
-//   // const date = "2024-01-01";
-//   // const password = "123"; // 在实际应用中，密码应该是随机生成的
-
-//   function getRandomInt(max) {
-//     return Math.floor(Math.random() * max);
-//   }
-
-//   function getRandomString(length) {
-//     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-//     let result = "";
-//     for (let i = 0; i < length; i++) {
-//       result += chars.charAt(getRandomInt(chars.length));
-//     }
-//     return result;
-//   }
-
-//   for (let i = 0; i < count; i++) {
-//     tableData.value.push({
-//       id: `${i + 1}`, // 使用模板字符串来确保ID被双引号包围，并递增
-//       username: getRandomString(7), // 生成一个随机的两个字符的姓名后缀，并加上“某”字作为名字
-//       password: getRandomString(7),
-//       email: getRandomString(5) + "@qq.com", // 生成一个随机的邮箱前缀
-//       phone: "1" + getRandomInt(9999999999).toString().padStart(10, "0"), // 生成一个随机的11位手机号
-//       update_time: Date.now(),
-//       role: roles[getRandomInt(roles.length)], // 随机分配一个角色
-//     });
-//     post("user", tableData.value[i]);
-//   }
-
-//   return tableData.value;
-// }
-
-// 使用函数生成5个用户数据
-// generateUserData(666);
-
-// const updateTableData = () => {
-//   getData();
-//   handleSearch();  
-
-// };
-
 const updateTableData = () => {
   console.log("调用updateTableData");
   mygetData();
-  handleSearch();  
+  handleSearch();
 }
 
 const updateData = () => {
@@ -294,14 +262,14 @@ const updateData = () => {
   updateTableData();
 };
 //刷新
-const refresh = () => {  
+const refresh = () => {
   updateData();
   ElMessage.success("刷新成功");
 };
 
 
-onMounted(() => { 
-  
+onMounted(() => {
+
   updateData();
 
 });

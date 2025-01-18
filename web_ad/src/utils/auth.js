@@ -15,6 +15,16 @@ export function removeToken(token) {
 
 
 
-
+export function setUserId(userId) {
+    return localStorage.setItem('userId', userId);
+};
+//取
+export function getUserId() {
+    return localStorage.getItem('userId');
+};
+//删
+export function removeUserId(userId) {
+    return localStorage.removeItem('userId');
+};
 
 

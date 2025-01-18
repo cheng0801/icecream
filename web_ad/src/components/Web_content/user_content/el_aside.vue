@@ -10,7 +10,7 @@ async function fetchUserInfo() {
     const res = await axios.get("http://localhost:3000/posts/12191");
 
     userInfo.list = res.data;
-    console.log(res.data, userInfo.list.ck);
+    // console.log(res.data, userInfo.list.ck);
   } catch (error) {
     console.error("Error fetching user info:", error);
     throw error;

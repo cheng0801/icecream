@@ -27,7 +27,7 @@
         </el-form-item>
         <el-form-item prop="pass">
           <el-input
-            v-model="ruleForm.pass"
+            v-model="ruleForm.password"
             type="password"
             autocomplete="on"
             placeholder="密码"
@@ -39,7 +39,7 @@
             </template>
           </el-input>
         </el-form-item>
-        <el-form-item prop="checkPass">
+        <!-- <el-form-item prop="checkPass">
           <el-input
             v-model="ruleForm.checkPass"
             type="password"
@@ -52,7 +52,7 @@
               </el-icon>
             </template>
           </el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item type="email" prop="e_mail">
           <el-input v-model.number="ruleForm.e_mail" placeholder="邮箱">
             <template #prepend>
@@ -62,12 +62,12 @@
             </template>
           </el-input>
         </el-form-item>
-        <el-form-item class="mouse">
+        <!-- <el-form-item class="mouse">
           <div>
             <input type="checkbox" v-model="ruleForm.ischeck" />
             已阅读并同意 <span>用户协议</span>和<span>隐私政策</span>
           </div>
-        </el-form-item>
+        </el-form-item> -->
         <div class="btn">
           <el-button
             class="login-btn"
@@ -95,29 +95,29 @@ import { useRouter } from 'vue-router';
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus';
 
 
-import request from "@/utils/request";
-// import router from "@/route";+
-
+import {mypostData} from "@/utils/request";
+import axios from 'axios';
+// import router from "@/route"
 const router = useRouter();
 const sign = ref(true);
 
 const ruleFormRef = ref<FormInstance>();
 
-const validatePass = (rule: any, value: any, callback: any) => {
-  if (value === "") {
-    callback(new Error("请输入密码"));
-  } else {
-    if (ruleForm.checkPass !== "") {
-      if (!ruleFormRef.value) return;
-      ruleFormRef.value.validateField("checkPass");
-    }
-    callback();
-  }
-};
+// const validatePass = (rule: any, value: any, callback: any) => {
+//   if (value === "") {
+//     callback(new Error("请输入密码"));
+//   } else {
+//     if (ruleForm.checkPass !== "") {
+//       if (!ruleFormRef.value) return;
+//       ruleFormRef.value.validateField("checkPass");
+//     }
+//     callback();
+//   }
+// };
 const validatePass2 = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请再次输入密码"));
-  } else if (value !== ruleForm.pass) {
+  } else if (value !== ruleForm.password) {
     callback(new Error("两次密码不一致"));
   } else {
     callback();
@@ -125,11 +125,11 @@ const validatePass2 = (rule: any, value: any, callback: any) => {
 };
 
 const ruleForm = reactive({
-  username: "",
-  pass: "",
-  checkPass: "",
-  e_mail: "",
-  ischeck: false,
+  username: "test111",
+  password: "test111",
+  // checkPass: "",
+  e_mail: "zxcvasdf@qq.com",
+  // ischeck: false,
 });
 
 const rules = reactive<FormRules<typeof ruleForm>>({
@@ -147,8 +147,8 @@ const rules = reactive<FormRules<typeof ruleForm>>({
       trigger: "blur",
     },
   ],
-  pass: [
-    { validator: validatePass, trigger: "blur" },
+  password: [
+    // { validator: validatePass, trigger: "blur" },
 
     { required: true, message: "请输入密码", trigger: "blur" },
     {
@@ -163,20 +163,20 @@ const rules = reactive<FormRules<typeof ruleForm>>({
       trigger: "blur",
     },
   ],
-  checkPass: [
-    { validator: validatePass2, trigger: "blur" },
-    {
-      min: 6,
-      max: 30,
-      message: "密码需为字母开头,且由6到30位字母或数字或下划线组成",
-      trigger: "blur",
-    },
-    {
-      pattern: /^[a-zA-Z][a-zA-Z0-9_]{5,29}$/,
-      message: "账号需为字母开头,且由6到30位字母或数字或下划线组成",
-      trigger: "blur",
-    },
-  ],
+  // checkPass: [
+  //   { validator: validatePass2, trigger: "blur" },
+  //   {
+  //     min: 6,
+  //     max: 30,
+  //     message: "密码需为字母开头,且由6到30位字母或数字或下划线组成",
+  //     trigger: "blur",
+  //   },
+  //   {
+  //     pattern: /^[a-zA-Z][a-zA-Z0-9_]{5,29}$/,
+  //     message: "账号需为字母开头,且由6到30位字母或数字或下划线组成",
+  //     trigger: "blur",
+  //   },
+  // ],
 
   // tele: [
   //   { required: true, message: "请输入电话号码", trigger: "blur" },
@@ -202,29 +202,24 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   formEl.validate(async (valid) => {
     if (valid) {
       // 检查用户是否同意协议
-      if (!ruleForm.ischeck) {
-        alert("请阅读用户协议");
-        return;
-      }
+      // if (!ruleForm.ischeck) {
+      //   alert("请阅读用户协议");
+      //   return;
+      // }
 
       // 构建要发送的数据
-      const postData = {
-        ...ruleForm,
-        // 如果需要，可以在这里转换或删除某些属性
-        // 例如，可能不希望发送密码的明文到后端（取决于后端的设计）
-        // pass: '', // 可能需要加密或省略
-        // checkPass: '', // 这个字段通常不会发送到后端
-      };
+      const postData = JSON.stringify({
+        ...ruleForm,        
+      });
       // console.log('11111')
-      // console.log(postData);
+      console.log(postData);
+
       try {
         // 发送 POST 请求到后端
-        const response = await request.post("users", {
-           userinfo:postData,
-        });
-
+        const response = await mypostData("api/register", postData);
+        console.log(response);
         // 根据后端的响应处理结果
-        if (valid/*response.data.success*/) {
+        if (response.data.code==200) {
             ElMessage.success('注册成功，请登录')
           // 可能需要执行其他操作，如跳转到登录页面
         } else {

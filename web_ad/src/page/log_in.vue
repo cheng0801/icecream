@@ -58,9 +58,10 @@ import { reactive, ref } from "vue";
 import { type ElAlert, type FormInstance, type FormRules, ElMessage } from "element-plus";
 import { RouterLink, useRouter } from "vue-router";
 import { login } from "@/api";
-import { setToken } from "@/utils/auth";
+import { setToken, setUserId } from "@/utils/auth";
 
 import { useTokenStore, useInfoStore } from '@/stores/userInfo'
+import { getData } from "@/utils/request";
 
 const tokenStore = useTokenStore()
 const userInfoStore = useInfoStore()
@@ -81,6 +82,7 @@ const isLoading = ref(false)
 const ruleForm = reactive({
   username: defParam ? defParam.username : '',
   password: defParam ? defParam.password : '',
+
 });
 
 
@@ -126,32 +128,38 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     await formEl.validate(async (valid) => {
       if (valid) {
         // 如果验证通过，发送登录请求
-        const postData = {
+        const postData = JSON.stringify({
           ...ruleForm,
-        };
+        })
 
         const response = await login(postData);
-        const { msg, token, status } = response.data;
-        console.log(response.status)
-        console.log(token)
+        // const response= await getData('user/1219');
+        // const {status,message,data}=response.data
+        // console.log(response.data, "登录响应数据");
+        const { data, code } = response.data;
+
+        // console.log(data.token)
 
         //缓存token
         //封装
         // 处理响应
-        if (response.data.status === 1) {
+        if (response.data.code === 200) {
+          // if (res.data.status === 1) {
           // 登录成功，可以根据需要跳转到其他页面或显示成功消息
           //改变登录状态
           isLoading.value = false
-          //  存用户信息
-          userInfoStore.saveInfo(response.data)
-          tokenStore.saveToken(token)
-
-          setToken(token);
+          // //  存用户信息
+          // console.log(res.data.message);
+          // userInfoStore.saveInfo(res.data)
+          setUserId(data.userID)
+          tokenStore.saveToken(data.token);
+          // console.log(data.token);
+          setToken(data.token);
           // 使用 vue-router 跳转
           router.push({ name: "home" });
           //记住密码后保存
           if (checked.value) {
-            localStorage.setItem('login-param', JSON.stringify(postData));
+            localStorage.setItem('login-param', postData);
           } else {
             localStorage.removeItem('login-param');
           }
@@ -160,7 +168,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
           //改变登录状态
           isLoading.value = false
           // 登录失败，显示错误信息
-          ElMessage.success("登录失败 " + response.data.message);
+          // ElMessage.success("登录成功 " + response.data.message);
         }
       } else {
         // 验证失败，显示验证错误信息
@@ -220,7 +228,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 }
 
 .login-content {
-  padding: 40px 50px 50px ;
+  padding: 40px 50px 50px;
   box-sizing: border-box;
 
 }
@@ -252,7 +260,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
   width: 450px;
   border-radius: 5px;
   background: #fff;
-padding-top: 10px;
+  padding-top: 10px;
 }
 
 

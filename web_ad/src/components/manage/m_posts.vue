@@ -4,8 +4,7 @@
     <div class="container">
       <TableCustom :columns="columns" :tableData="tableData" :total="total" :viewFunc="handleView"
         :delFunc="handleDelete" :editFunc="editUpdata" :refresh="refresh" @handleSizeChange="handleSizeChange"
-        :layout="layout"
-        @handleCurrentChange="handleCurrentChange">
+        :layout="layout" @handleCurrentChange="handleCurrentChange">
         <template #toolbarBtn>
           <el-button type="warning" :icon="CirclePlusFilled" @click="visible = true">新增</el-button>
         </template>
@@ -29,26 +28,30 @@ import { fetchUserData, fetchUserData11 } from "@/api";
 import TableCustom from "@/components/manage/m_t_custom.vue";
 import TableDetail from "@/components/manage/m_t_detail.vue";
 import TableSearch from "@/components/manage/m_search.vue";
-import TableEdit from "./m_edit.vue";
+import TableEdit from "@/components/manage/m_edit.vue";
 
 import { FormOption, FormOptionList } from "@/types/form-option";
-import {User} from "@/types/user"
-
+import { User } from "@/types/user"
+import { getToken } from "@/utils/auth";
+const user_token=getToken()
 
 // 查询相关
 const query = reactive({
-  username:""
+  username: ""
 });
 
-const layout=ref("total,sizes, prev, pager, next,jumper")
+const layout = ref("total,sizes, prev, pager, next,jumper")
 // 表格相关
 let columns = ref([
   { type: "index", label: "序号", width: 55, align: "center" },
-  { prop: "username", label: "用户名" },
-  { prop: "phone", label: "手机号" },
-  { type: 'switch', label: '状态', prop: 'status', required: false, activeText: '启用', inactiveText: '禁用' },
-  
+  { type: "a",prop: "title", label: "主题", width: 300 },
+  { prop: "username", label: "作者" },
+  { prop: "browse", label: "查看" },
+  { prop: "update_time", label: "更新时间", width: 100 },
+  { prop: "create_time", label: "创建时间", width: 100 },
+  {type:"swich", prop: "top", label: "置顶" },
   { prop: "operator", label: "操作", width: 250 },
+
 ]);
 const tableData = ref<User[]>([]);
 const filterData = ref([])
@@ -59,27 +62,107 @@ const currentPage = ref(1);
 const total = ref(0);
 
 const mygetData = async () => {
-  const res = await fetchUserData();
+  // const res = await fetchUserData();
+  const res = await getData(/*"api/user/detail/4"*/"api/theme/list/1");
+  const { status, msg, num, data_theme } = res.data
+  console.log(status, msg, num, data_theme);
   const start = (currentPage.value - 1) * pageSize.value;
-    const end = start + pageSize.value;
+  const end = start + pageSize.value;
   // console.log(res);
+
   //首次刷新
-  if(!filterData){
-    filterData.value = res.data
-  
-  } else{
+  if (!filterData) {
+    filterData.value = data_theme
+
+  } else {
     const start = (currentPage.value - 1) * pageSize.value;
     const end = start + pageSize.value;
-    tableData.value = res.data.slice(start,end)
+    tableData.value = data_theme.slice(start, end)
 
-    filterData.value = res.data
+    filterData.value = data_theme
   }
- 
-  
-  total.value = res.data.length;
+
+
+  total.value = res.data.num;
+
+
+
+  if (!filterData.value || !Array.isArray(filterData.value)) {
+    console.error('filterData 未被正确定义或初始化');
+    return;
+  }
+  filterData.value = filterData.value.map(item => ({
+    ...item,
+    update_time: formatTime(item.update_time) // 调用格式化函数
+
+  })
+
+  );
+  if (data_theme && Array.isArray(data_theme)) {
+    tableData.value = data_theme.slice(start, end).map(item => ({
+      ...item,
+      update_time: formatTime(item.update_time), // 调用格式化函数
+      create_time: formatTime(item.create_time),
+      title: truncatedTitle(item.title)
+    }));
+  }
+  console.log(filterData.value)
 };
 getData()
+//内容缩略
+const truncatedTitle = (title, maxLength = 20) => {
+  if (title.length > maxLength) {
+    return title.slice(0, maxLength) + '...';
+  }
+  return title;
+};
+// 方法，用于格式化时间差异
+function formatTime(update_time) {
+  // 计算属性，用于过滤和格式化表格数据
 
+  // 假设这是从服务器或其他来源获取的 update_time 字符串
+  const updateTimeStr = update_time;
+
+  // 使用 Date 对象解析这个时间字符串
+  const updateTime = new Date(updateTimeStr);
+
+  // 获取当前时间
+  const now = new Date();
+
+  // 计算时间差（毫秒）
+  const timeDifference = now - updateTime;
+
+  // 将时间差转换为更易读的格式
+  const secondsInMinute = 60;
+  const secondsInHour = 60 * secondsInMinute;
+  const secondsInDay = 24 * secondsInHour;
+
+  let timeDifferenceString;
+
+  if (timeDifference >= secondsInDay * 1000) {
+    // 注意：这里需要将秒转换为毫秒进行比较
+    const days = Math.floor(timeDifference / (secondsInDay * 1000));
+    timeDifferenceString = `${days}天前`;
+  } else if (timeDifference >= secondsInHour * 1000) {
+    const hours = Math.floor(timeDifference / (secondsInHour * 1000));
+    timeDifferenceString = `${hours}小时前`;
+  } else if (timeDifference >= secondsInMinute * 1000) {
+    const minutes = Math.floor(timeDifference / (secondsInMinute * 1000));
+    timeDifferenceString = `${minutes}分钟前`;
+  } else {
+    // 由于时间差可能小于一分钟，并且我们可能有毫秒级的精度，
+    // 所以这里可以简单地返回“刚刚”或者更精确地显示秒数或毫秒数。
+    // 为了简单起见，这里使用“刚刚”。
+    timeDifferenceString = `刚刚`;
+    // 如果需要更精确，可以使用以下代码：
+    // const seconds = Math.floor(timeDifference / 1000);
+    // timeDifferenceString = `${seconds}秒前`;
+    // 或者，如果需要显示毫秒：
+    // const milliseconds = timeDifference;
+    // timeDifferenceString = `${milliseconds}毫秒前`;
+  }
+  return timeDifferenceString;
+}
 
 const searchOpt = ref<FormOptionList[]>([
   { type: "input", label: "用户名：", prop: "username" },
@@ -96,9 +179,9 @@ const filterAndPaginateData = (data, queryName, currentPage, pageSize) => {
   // 再分页
   const start = (currentPage - 1) * pageSize;
   const end = start + pageSize;
-  const filterTableData=filteredData.slice(start, end)
- const filterTableDataLength=filteredData.length
-  return {filterTableData,filterTableDataLength}
+  const filterTableData = filteredData.slice(start, end)
+  const filterTableDataLength = filteredData.length
+  return { filterTableData, filterTableDataLength }
 
 };
 
@@ -106,13 +189,13 @@ const filterAndPaginateData = (data, queryName, currentPage, pageSize) => {
 
 
 const handleSearch = () => {
-  
+
   console.log("调用handlesearch");
   // 直接调用过滤和分页函数，并更新 tableData 和 total
-  const a= filterAndPaginateData(filterData.value, query.username, currentPage.value, pageSize.value);
+  const a = filterAndPaginateData(filterData.value, query.username, currentPage.value, pageSize.value);
   tableData.value = a.filterTableData
-  
-  total.value = a.filterTableDataLength 
+
+  total.value = a.filterTableDataLength
 };
 
 // 新增/编辑弹窗相关
@@ -190,7 +273,7 @@ const handleView = (row: User) => {
       label: "注册日期",
     },
   ];
-  
+
   visible1.value = true;
 };
 
@@ -222,7 +305,7 @@ const handleDelete = async (row: User) => {
 const handleEdit = (row) => {
 
   rowData.value = { ...row };
-  
+
   console.log(rowData.value.id, '行数据详情');
   const id = rowData.value.id;
   //上传修改
@@ -285,7 +368,7 @@ const handleEdit = (row) => {
 const updateTableData = () => {
   console.log("调用updateTableData");
   mygetData();
-  handleSearch();  
+  handleSearch();
 }
 
 const updateData = () => {
@@ -294,14 +377,14 @@ const updateData = () => {
   updateTableData();
 };
 //刷新
-const refresh = () => {  
+const refresh = () => {
   updateData();
   ElMessage.success("刷新成功");
 };
 
 
-onMounted(() => { 
-  
+onMounted(() => {
+
   updateData();
 
 });

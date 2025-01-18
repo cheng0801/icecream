@@ -87,7 +87,7 @@ import { useSidebarStore } from "@/stores/m_sidebar";
 import { useInfoStore, useTokenStore, } from "@/stores//userInfo";
 import { useRouter, useRoute } from "vue-router";
 // import imgurl from '../assets/img/img.jpg';
-
+import { removeToken, removeUserId } from "@/utils/auth";
 const Info = useInfoStore();
 const imgurl = Info.userInfo.avatar
 
@@ -124,13 +124,14 @@ onMounted(() => {
 
 const currentPath = route.path;
 
-console.log(currentPath)
+// console.log(currentPath)
 //用户退出登录
 const handleCommand = (command) => {
   if (command == "loginout") {
     token.saveToken();
     Info.remove()
     Info.saveInfo('')
+    removeUserId()
     router.push("/log");
   } else if (command == "user") {
     router.push("/user_center");

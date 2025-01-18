@@ -1,10 +1,8 @@
 <template>
 
 <el-form
-    ref="ruleFormRef"
-    
+    ref="ruleFormRef" 
     :model="ruleForm"
-   
     :rules="rules"
     label-width="auto"
     class="demo-ruleForm"
@@ -13,11 +11,11 @@
       <el-input v-model="ruleForm.title"   placeholder="标题"/>
     </el-form-item>
     <el-form-item>
-        <Wang_Editer v-model="ruleForm.content" />
+        <Wang_Editer v-model="ruleForm.describe" />
       </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm(ruleFormRef)">
-        发帖
+        {{fatie}}
       </el-button>
       
     </el-form-item>
@@ -28,26 +26,40 @@
 <script setup lang="ts">
 
 import { posts } from "@/api";
-
-import { reactive, ref } from 'vue'
+import { mypostData } from "@/utils/request";
+import { reactive, ref,defineProps } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 
+
+import { getToken } from "@/utils/auth";
+const user_token=getToken()
 const ruleFormRef = ref<FormInstance>()
 
-
+const prop=defineProps({
+  fatie:{
+    type:String,
+    default:"发新帖"
+  }
+})
 
 
 
 const ruleForm = reactive({
   title: '',
-  content: '',
+  describe: '',
 })
 
 const rules = reactive<FormRules<typeof ruleForm>>({
   title: [ {
       min: 1,
-      max: 80,
-      message: "标题由1到80位组成",
+      max: 30,
+      message: "标题由8到40位组成",
+      trigger: "blur",
+    },],
+    describe: [ {
+      min: 1,
+      max: 4000,
+      message: "内容由8到4000位组成",
       trigger: "blur",
     },],
 
@@ -58,10 +70,14 @@ const submitForm = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       console.log('submit!')
-      const{ title,content} = ruleForm;
-console.log({ title,content});
+     const postDATA = JSON.stringify({
+          ...ruleForm,
+        })
+// console.log({ title,content});
   // 发送 POST 请求到后端
-   posts(12191, { title,content});
+  mypostData("api/user/add/?token="+user_token,postDATA);
+  
+  console.log(postDATA);
     } else {
       console.log('error submit!')
     }

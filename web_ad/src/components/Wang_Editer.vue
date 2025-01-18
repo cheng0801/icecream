@@ -1,16 +1,14 @@
 <template>
+  <div style="display: none;">
+    {{ isEdit }}+{{ !isReadonly }}
+  </div>
   <div style="border: 1px solid #ccc; z-index: 9999;">
-    <Toolbar
-      style="border-bottom: 1px solid #ccc"
-      :editor="editorRef"
-      :defaultConfig="toolbarConfig"
-    />
-    <Editor
-      style="height: 500px; overflow-y: hidden"
-      v-model="valueHtml"
-      :defaultConfig="editorConfig"
-      @onCreated="handleCreated"
-    />
+    <Toolbar v-if="isEdit" style="border-bottom: 1px solid #ccc;  " :editor="editorRef"
+      :defaultConfig="toolbarConfig" />
+
+    <Editor style="height: 500px; min-width: 800px;;overflow-y: hidden" v-model="valueHtml"
+      :defaultConfig="editorConfig" @onCreated="handleCreated" />
+
   </div>
 </template>
 
@@ -20,25 +18,37 @@ import { onBeforeUnmount, ref, shallowRef, onMounted, watch, watchEffect } from 
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 
 //声明属性
+
 //
 // 声明属性，Vue 会自动处理类型
 const props = defineProps({
   modelValue: String,
+  isEdit:
+  {
+    type: Boolean,
+    default: true
+  },
+  isReadonly:
+  {
+    type: Boolean,
+    default: true
+  },
 });
 
 // 声明事件
 const emits = defineEmits(["update:modelValue"]);
-// const emits =defineEmits<{(e:"update:modelValue",value:string):void}>()
+
 
 // 编辑器实例
 const editorRef = shallowRef(null);
 
 // 内容 HTML
 const valueHtml = ref(props.modelValue || "<p>公益特色t</p>");
-
+const Zhi_du = ref( props.isReadonly  )
 // 监听 props.modelValue 的变化，并更新 valueHtml
 watchEffect(() => {
   valueHtml.value = props.modelValue;
+  Zhi_du.value=props.isReadonly
 });
 
 // 当 valueHtml 变化时，触发 update:modelValue 事件
@@ -46,11 +56,18 @@ watch(valueHtml, (newHtml) => {
   emits("update:modelValue", newHtml);
 });
 
+
+// const isEdit=computed(() => {
+// return userposts.userPost.user_id == user_Id
+// })
+// const isZhidu=computed(() => {
+// return userposts.userPost.user_id == user_Id
+// })
 // 模拟异步获取内容
 onMounted(() => {
-  setTimeout(() => {
-    valueHtml.value = "";
-  }, 1500);
+  // setTimeout(() => {
+  //   valueHtml.value = "";
+  // }, 1500);
 });
 
 // 工具栏配置
@@ -59,6 +76,8 @@ const toolbarConfig = {};
 // 编辑器配置
 const editorConfig = {
   placeholder: "请输入内容...",
+  readOnly: !Zhi_du.value,//设置只读属性
+  // readOnly:isReadonly,
   MENU_CONF: {
     uploadImage: {
       server: "posts",

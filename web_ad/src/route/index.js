@@ -17,6 +17,13 @@ const routes = [
 
     },
     {
+        path: '/test_my',
+        name: 'dsdfdsf',
+        component: import("@/page/test_my.vue")
+
+    },
+    
+    {
         path: '/user/:id',
         name: 'userhome',
         component: User_content,
@@ -42,7 +49,7 @@ const routes = [
         path: "/log",
         name: "log",
         meta: {
-            title: '用户管理',
+            title: '登录',
             noAuth: true,
         },
         component: () =>
@@ -53,7 +60,7 @@ const routes = [
         path: "/sign",
         name: "sign",
         meta: {
-            title: '用户管理',
+            title: '注册',
             noAuth: true,
         },
         component: () =>
@@ -63,7 +70,7 @@ const routes = [
     {
         path: "/rest_psd",
         meta: {
-            title: '用户管理',
+            title: '重置密码',
             noAuth: true,
         },
         component: () =>
@@ -73,7 +80,7 @@ const routes = [
     {
         path: "/user_center",
         meta: {
-            title: '用户管理',
+            title: '用户中心',
             noAuth: true,
         },
         component: () =>
@@ -83,7 +90,7 @@ const routes = [
     {
         path: "/test",
         meta: {
-            title: '用户管理',
+            title: 'test',
             noAuth: true,
         },
         component: () =>
@@ -94,7 +101,7 @@ const routes = [
     {
         path: "/:pathMatch(.*)*",
         meta: {
-            title: '用户管理',
+            title: 'NOT_FOUND页面',
             noAuth: true,
         },
         component: () =>
@@ -114,29 +121,38 @@ const routes = [
     },
     {
         path: "/manage",
-        meta: {
-            title: '用户管理',
-            requiresAdmin: true, // 修改为requiresAdmin并设置为true
-        },
+        // meta: {
+        //     title: '系统首页',
+        //     requiresAdmin: true, // 修改为requiresAdmin并设置为true
+        // },
         component: () => import('../page/Web_manage.vue'),
         children: [
             {
-                path: '/manage/system-user',
-                name: 'system-user',
-                meta: {
-                    title: '系统首页',
-                    requiresAdmin: true, // 同样设置为需要管理员权限
-                },
-                component: () => import('../components/Web_content/my_table.vue'),
+                path: '/manage/system-posts',
+                name: 'system-posts',
+                // meta: {
+                //     title: '帖子管理',
+                //     requiresAdmin: true, // 同样设置为需要管理员权限
+                // },
+                component: () => import('../components/manage/m_posts.vue'),
             },
             {
                 path: '/manage/system-role',
                 name: 'system-role',
-                meta: {
-                    title: '用户管理', // 注意：这里可能需要根据实际需求调整标题，以避免与父路由重复
-                    requiresAdmin: true, // 同样设置为需要管理员权限
-                },
+                // meta: {
+                //     title: '角色管理', // 注意：这里可能需要根据实际需求调整标题，以避免与父路由重复
+                //     requiresAdmin: true, // 同样设置为需要管理员权限
+                // },
                 component: () => import('../components/manage/m_user.vue'),
+            },
+            {
+                path: '/manage/system-images',
+                name: 'system-images',
+                // meta: {
+                //     title: '图片管理', // 注意：这里可能需要根据实际需求调整标题，以避免与父路由重复
+                //     requiresAdmin: true, // 同样设置为需要管理员权限
+                // },
+                component: () => import('../components/manage/m_images/m_images.vue'),
             },
         ]
     },
@@ -148,21 +164,21 @@ const router = createRouter({
 })
 
 //路由拦截
-router.beforeEach((to, form, next) => {
-    const manage = useInfoStore().userInfo.role;
-    if (to.matched.some(record => record.meta.requiresAdmin)) {
-        // 如果用户不是管理员，则重定向到403页面（或其他无权访问的页面）
-        if (manage !== "管理员") {
-            console.log('用户不是管理员，重定向到403页面');
-            next("/403"); // 处理权限不足的403页面
-        } else {
-            console.log('用户是管理员，允许访问');
-            next();
-        }
-    } else {
-        // 如果不需要管理员权限，则正常导航
-        next();
-    }
-})
+// router.beforeEach((to, form, next) => {
+//     const manage = useInfoStore().userInfo.role;
+//     if (to.matched.some(record => record.meta.requiresAdmin)) {
+//         // 如果用户不是管理员，则重定向到403页面（或其他无权访问的页面）
+//         if (manage !== "管理员") {
+//             console.log('用户不是管理员，重定向到403页面');
+//             next("/403"); // 处理权限不足的403页面
+//         } else {
+//             console.log('用户是管理员，允许访问');
+//             next();
+//         }
+//     } else {
+//         // 如果不需要管理员权限，则正常导航
+//         next();
+//     }
+// })
 
 export default router
